@@ -1,40 +1,21 @@
 import { useState, useEffect } from "react";
 import Profile from "./Profile";
 import PrayCard from "./PrayCard";
-import { createClient } from "@supabase/supabase-js";
-
-const supabase = createClient(
-  import.meta.env.VITE_SUPA_PROJECT_URL,
-  import.meta.env.VITE_SUPA_ANON_KEY
-);
+import { supabase } from "../supaClient";
 
 const Group = () => {
-  // Supabase test
   const [groups, setGroups] = useState([]);
   const [session, setSession] = useState(null);
 
   useEffect(() => {
-    getCountries();
-
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log(session);
       setSession(session);
     });
-    console.log(session);
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-
-    return () => subscription.unsubscribe();
+    getCountries();
   }, []);
 
-  //   useEffect(() => {
-  //     getCountries();
-  //   }, []);
-
   async function getCountries() {
-    //console.log(supabase);
     const { data } = await supabase.from("groups").select();
     setGroups(data);
   }
@@ -42,6 +23,15 @@ const Group = () => {
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    window.location.reload();
+  };
+
+  if (!session) {
+    return <div className="text-white">Login Pease</div>;
+  }
 
   return (
     <div>
@@ -57,8 +47,10 @@ const Group = () => {
             <Profile key={groups.name} name={groups.name} onClick={openModal} />
           ))}
         </ul>
+        <button onClick={handleLogout} className="bg-red-400 p-5">
+          Logout
+        </button>
       </div>
-
       <PrayCard isOpen={isModalOpen} onClose={closeModal} />
     </div>
   );

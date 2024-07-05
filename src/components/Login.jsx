@@ -1,20 +1,43 @@
-import { useNavigate } from "react-router-dom";
+import { createClient } from "@supabase/supabase-js";
+import { useState, useEffect } from "react";
+import { Auth } from "@supabase/auth-ui-react";
+import { ThemeSupa } from "@supabase/auth-ui-shared";
+
+const supabase = createClient(
+  import.meta.env.VITE_SUPA_PROJECT_URL,
+  import.meta.env.VITE_SUPA_ANON_KEY
+);
 
 const Login = () => {
-  const navigate = useNavigate();
+  const [session, setSession] = useState(null);
 
-  return (
-    <>
-      <div>
-        <button
-          onClick={() => navigate("/group")}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          로그인하기
-        </button>
-      </div>
-    </>
-  );
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  if (!session) {
+    return (
+      <Auth
+        redirectTo="http://localhost:5173/group"
+        supabaseClient={supabase}
+        appearance={{ theme: ThemeSupa }}
+        onlyThirdPartyProviders
+        providers={["kakao"]}
+      />
+    );
+  } else {
+    return <div className="text-white">Logged in!</div>;
+  }
 };
 
 export default Login;

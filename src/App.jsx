@@ -6,8 +6,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 const App = () => {
   return (
-    <div className="App bg-red-50 h-screen">
-      <div className="mx-auto max-w-[600px] bg-black mt-20">
+    <div className="App h-screen">
+      <div className="mx-auto max-w-[600px] ">
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Main />}></Route>

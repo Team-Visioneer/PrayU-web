@@ -1,8 +1,14 @@
 import Profile from "./Profile";
 import PrayCard from "./PrayCard";
 import useMember from "../hooks/useMember";
+import { useParams } from "react-router-dom";
+import useGroup from "../hooks/useGroup";
 
 const Group = () => {
+  const { groupId } = useParams();
+
+  const { groupName } = useGroup(groupId);
+
   const {
     members,
     session,
@@ -22,7 +28,7 @@ const Group = () => {
 
   return (
     <div>
-      <h3 className="text-center mt-10 text-3xl">Visioneer Group</h3>
+      <h3 className="text-center mt-10 text-3xl">{groupName} Group</h3>
       <div className="mt-10">
         <h1 className="">My</h1>
         {currentUser ? (

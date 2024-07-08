@@ -3,10 +3,12 @@ import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "../supaClient";
 import { useNavigate } from "react-router-dom";
+import { ClipLoader } from "react-spinners"; // react-spinners에서 ClipLoader를 가져옵니다.
 
 const Login = () => {
   const navigate = useNavigate();
   const [groupId, setGroupId] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const fetchGroupId = async (userId) => {
     const { data, error } = await supabase
@@ -34,8 +36,17 @@ const Login = () => {
           navigate(`/group/${fetchedGroupId}`);
         }
       }
+      setLoading(false);
     });
   }, [navigate]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <ClipLoader size={50} color={"#123abc"} loading={loading} />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col justify-center items-center">

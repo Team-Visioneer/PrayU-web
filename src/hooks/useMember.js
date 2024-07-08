@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "../supaClient";
 import { useNavigate } from "react-router-dom";
+import { fetchGroup } from "../apis/group";
 
 const useMember = (groupId) => {
   const [members, setMembers] = useState([]);
@@ -84,6 +85,11 @@ const useMember = (groupId) => {
       acc[userId].push(prayCard);
       return acc;
     }, {});
+
+    //test place
+    const result = await fetchGroup("60540ce8-e483-4a1b-872b-06c95a47cc2e");
+    console.log("result>>", result);
+    //test place
 
     const membersWithProfiles = members.map((member) => ({
       ...member,

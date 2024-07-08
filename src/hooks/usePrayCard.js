@@ -12,8 +12,8 @@ const usePrayCard = (initialPrayer, memberId) => {
 
   const handleSaveClick = async () => {
     const { data } = await supabase
-      .from("test")
-      .update({ prayer: prayerDetails })
+      .from("member")
+      .update({ pray_summary: prayerDetails })
       .eq("id", memberId);
     console.log(data);
     setIsEditing(false);

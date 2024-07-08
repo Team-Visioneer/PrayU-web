@@ -6,6 +6,7 @@ import useLogin from "../hooks/useLogin";
 
 const Login = () => {
   const { groupId, loading } = useLogin();
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">

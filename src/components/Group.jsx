@@ -3,7 +3,7 @@ import PrayCard from "./PrayCard";
 import useMember from "../hooks/useMember";
 import { useParams } from "react-router-dom";
 import useGroup from "../hooks/useGroup";
-import { ClipLoader } from "react-spinners"; // react-spinners에서 ClipLoader 가져오기
+import { ClipLoader } from "react-spinners";
 
 const Group = () => {
   const { groupId } = useParams();
@@ -16,7 +16,7 @@ const Group = () => {
     closeModal,
     handleLogout,
     selectedMember,
-    loading, // useMember 훅에서 로딩 상태 가져오기
+    loading,
   } = useMember(groupId);
 
   if (loading) {

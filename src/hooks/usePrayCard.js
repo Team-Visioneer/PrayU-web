@@ -1,26 +1,40 @@
 import { useState } from "react";
 import { supabase } from "../supaClient";
 
-const usePrayCard = (initialPrayer, memberId) => {
+const usePrayCard = (lastestPrayCard) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [prayerDetails, setPrayerDetails] = useState(initialPrayer);
+  const [userInput, setUserInput] = useState(
+    lastestPrayCard ? lastestPrayCard.content : "아직 기도제목이 없어요"
+  );
   const [hasPrayed, setHasPrayed] = useState(false);
 
   const handleEditClick = () => {
+    if (userInput === "아직 기도제목이 없어요") {
+      setUserInput("");
+    }
     setIsEditing(true);
   };
 
-  const handleSaveClick = async () => {
-    const { data } = await supabase
-      .from("member")
-      .update({ pray_summary: prayerDetails })
-      .eq("id", memberId);
-    console.log(data);
+  const handleSaveClick = async (groupId, prayCard) => {
+    if (!prayCard) {
+      await supabase.from("pray_card").insert({
+        group_id: groupId,
+        content: userInput,
+      });
+
+      setIsEditing(false);
+      return;
+    }
+    await supabase
+      .from("pray_card")
+      .update({ content: userInput })
+      .eq("id", prayCard.id);
+
     setIsEditing(false);
   };
 
   const handleChange = (e) => {
-    setPrayerDetails(e.target.value);
+    setUserInput(e.target.value);
   };
 
   const handlePrayClick = () => {
@@ -29,7 +43,7 @@ const usePrayCard = (initialPrayer, memberId) => {
 
   return {
     isEditing,
-    prayerDetails,
+    userInput,
     hasPrayed,
     handleEditClick,
     handleSaveClick,

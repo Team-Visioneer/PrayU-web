@@ -2,16 +2,17 @@ import PrayerList from "./PrayerList";
 import { AiOutlineEdit, AiOutlineSave, AiOutlineClose } from "react-icons/ai";
 import usePrayCard from "../hooks/usePrayCard";
 
-const PrayCard = ({ isOpen, onClose, member }) => {
+const PrayCard = ({ isOpen, onClose, member, groupId }) => {
+  const lastestPrayCard = member.prayCards.at(-1);
   const {
     isEditing,
-    prayerDetails,
+    userInput,
     hasPrayed,
     handleEditClick,
     handleSaveClick,
     handleChange,
     handlePrayClick,
-  } = usePrayCard(member.pray_summary, member.id);
+  } = usePrayCard(lastestPrayCard);
 
   if (!isOpen) return null;
 
@@ -37,17 +38,17 @@ const PrayCard = ({ isOpen, onClose, member }) => {
         <div className="flex justify-between items-center mb-4">
           {isEditing && member.isCurrentUser ? (
             <textarea
-              value={prayerDetails}
+              value={userInput}
               onChange={handleChange}
               className="w-full p-2 border rounded"
             />
           ) : (
-            <p>{prayerDetails}</p>
+            <p>{userInput}</p>
           )}
           {member.isCurrentUser &&
             (isEditing ? (
               <AiOutlineSave
-                onClick={handleSaveClick}
+                onClick={() => handleSaveClick(groupId, lastestPrayCard)}
                 className="text-blue-500 cursor-pointer ml-2"
                 size={24}
               />

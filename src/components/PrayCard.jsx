@@ -61,11 +61,9 @@ const PrayCard = ({ isOpen, onClose, member, groupId }) => {
             ))}
         </div>
         {member.isCurrentUser && (
-          <>
-            <div className="mt-5 mb-5">
-              <PrayerList />
-            </div>
-          </>
+          <div className="mt-5 mb-5">
+            <PrayerList />
+          </div>
         )}
         <button
           onClick={handlePrayClick}

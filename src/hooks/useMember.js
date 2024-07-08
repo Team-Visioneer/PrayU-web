@@ -39,6 +39,22 @@ const useMember = () => {
     return data;
   }
 
+  async function fetchPrayCards(user_ids) {
+    const { data, error } = await supabase
+      .from("pray_card")
+      .select("*")
+      .in("user_id", user_ids)
+      .is("deleted_at", null)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Error fetching pray cards:", error);
+      return [];
+    }
+
+    return data;
+  }
+
   async function fetchProfiles(user_ids) {
     const { data, error } = await supabase
       .from("profiles")
@@ -57,6 +73,15 @@ const useMember = () => {
     const members = await fetchMembers(group_id);
     const user_ids = members.map((member) => member.user_id);
     const profiles = await fetchProfiles(user_ids);
+    const prayCards = await fetchPrayCards(user_ids);
+    const userIdPrayCardHash = prayCards.reduce((acc, prayCard) => {
+      const userId = prayCard.user_id;
+      if (!acc[userId]) {
+        acc[userId] = [];
+      }
+      acc[userId].push(prayCard);
+      return acc;
+    }, {});
 
     const membersWithProfiles = members.map((member) => ({
       ...member,
@@ -67,9 +92,9 @@ const useMember = () => {
         profiles.find((profile) => profile.id === member.user_id)?.avatar_url ||
         "",
       isCurrentUser: member.user_id === currentUserId,
+      prayCards: userIdPrayCardHash[member.user_id] || [],
     }));
 
-    console.log(membersWithProfiles);
     setMembers(membersWithProfiles);
   }
 

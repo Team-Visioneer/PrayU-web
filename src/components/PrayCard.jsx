@@ -3,16 +3,16 @@ import { AiOutlineEdit, AiOutlineSave, AiOutlineClose } from "react-icons/ai";
 import usePrayCard from "../hooks/usePrayCard";
 
 const PrayCard = ({ isOpen, onClose, member, groupId }) => {
+  const lastestPrayCard = member.prayCards.at(-1);
   const {
     isEditing,
-    prayerDetails,
+    userInput,
     hasPrayed,
-    handleCreateClick,
     handleEditClick,
     handleSaveClick,
     handleChange,
     handlePrayClick,
-  } = usePrayCard(member.pray_summary, member.id);
+  } = usePrayCard(lastestPrayCard);
 
   if (!isOpen) return null;
 
@@ -38,17 +38,17 @@ const PrayCard = ({ isOpen, onClose, member, groupId }) => {
         <div className="flex justify-between items-center mb-4">
           {isEditing && member.isCurrentUser ? (
             <textarea
-              value={prayerDetails}
+              value={userInput}
               onChange={handleChange}
               className="w-full p-2 border rounded"
             />
           ) : (
-            <p>{prayerDetails}</p>
+            <p>{userInput}</p>
           )}
           {member.isCurrentUser &&
             (isEditing ? (
               <AiOutlineSave
-                onClick={handleSaveClick}
+                onClick={() => handleSaveClick(groupId, lastestPrayCard)}
                 className="text-blue-500 cursor-pointer ml-2"
                 size={24}
               />
@@ -65,12 +65,6 @@ const PrayCard = ({ isOpen, onClose, member, groupId }) => {
             <div className="mt-5 mb-5">
               <PrayerList />
             </div>
-            <button
-              onClick={() => handleCreateClick(groupId, "기도카드 내용")}
-              className="px-4 py-2 rounded w-full mt-4 bg-green-500 text-white"
-            >
-              기도카드 만들기
-            </button>
           </>
         )}
         <button

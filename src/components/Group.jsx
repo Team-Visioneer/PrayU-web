@@ -70,7 +70,7 @@ const Group = () => {
           isOpen={isModalOpen}
           onClose={closeModal}
           member={selectedMember}
-          groupId="56e7b16b-7ba3-41b7-a850-fd4d0ce8d41e"
+          groupId={groupId}
         />
       )}
     </div>

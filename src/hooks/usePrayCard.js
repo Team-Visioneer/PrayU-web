@@ -6,6 +6,13 @@ const usePrayCard = (initialPrayer, memberId) => {
   const [prayerDetails, setPrayerDetails] = useState(initialPrayer);
   const [hasPrayed, setHasPrayed] = useState(false);
 
+  const handleCreateClick = async (groupId, content) => {
+    await supabase.from("pray_card").insert({
+      group_id: groupId,
+      content: content,
+    });
+  };
+
   const handleEditClick = () => {
     setIsEditing(true);
   };
@@ -31,6 +38,7 @@ const usePrayCard = (initialPrayer, memberId) => {
     isEditing,
     prayerDetails,
     hasPrayed,
+    handleCreateClick,
     handleEditClick,
     handleSaveClick,
     handleChange,

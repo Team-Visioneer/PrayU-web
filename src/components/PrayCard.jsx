@@ -2,11 +2,12 @@ import PrayerList from "./PrayerList";
 import { AiOutlineEdit, AiOutlineSave, AiOutlineClose } from "react-icons/ai";
 import usePrayCard from "../hooks/usePrayCard";
 
-const PrayCard = ({ isOpen, onClose, member }) => {
+const PrayCard = ({ isOpen, onClose, member, groupId }) => {
   const {
     isEditing,
     prayerDetails,
     hasPrayed,
+    handleCreateClick,
     handleEditClick,
     handleSaveClick,
     handleChange,
@@ -60,9 +61,17 @@ const PrayCard = ({ isOpen, onClose, member }) => {
             ))}
         </div>
         {member.isCurrentUser && (
-          <div className="mt-5 mb-5">
-            <PrayerList />
-          </div>
+          <>
+            <div className="mt-5 mb-5">
+              <PrayerList />
+            </div>
+            <button
+              onClick={() => handleCreateClick(groupId, "기도카드 내용")}
+              className="px-4 py-2 rounded w-full mt-4 bg-green-500 text-white"
+            >
+              기도카드 만들기
+            </button>
+          </>
         )}
         <button
           onClick={handlePrayClick}

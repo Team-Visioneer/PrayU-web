@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../supaClient";
+import { useNavigate } from "react-router-dom";
 
 const useMember = () => {
   const [members, setMembers] = useState([]);
   const [session, setSession] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchSession();
@@ -111,7 +114,8 @@ const useMember = () => {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    window.location.reload();
+    navigate("/");
+    //window.location.reload();
   };
 
   return {

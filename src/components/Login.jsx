@@ -2,21 +2,25 @@ import { useState, useEffect } from "react";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "../supaClient";
+import { useNavigate } from "react-router-dom";
 
 // TODO: 세션 상태 삭제하기
 const Login = () => {
   const [session, setSession] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       console.log(session);
       setSession(session);
+      if (session) navigate("/group");
     });
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
+      if (session) navigate("/group");
     });
 
     return () => subscription.unsubscribe();

@@ -17,7 +17,7 @@ const Group = () => {
     handleLogout,
     selectedMember,
     loading, // useMember 훅에서 로딩 상태 가져오기
-  } = useMember();
+  } = useMember(groupId);
 
   if (loading) {
     return (

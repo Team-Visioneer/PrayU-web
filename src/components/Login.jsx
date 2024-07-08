@@ -1,45 +1,11 @@
-import { useState, useEffect } from "react";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "../supaClient";
-import { useNavigate } from "react-router-dom";
-import { ClipLoader } from "react-spinners"; // react-spinners에서 ClipLoader를 가져옵니다.
+import { ClipLoader } from "react-spinners";
+import useLogin from "../hooks/useLogin";
 
 const Login = () => {
-  const navigate = useNavigate();
-  const [groupId, setGroupId] = useState("");
-  const [loading, setLoading] = useState(true);
-
-  const fetchGroupId = async (userId) => {
-    const { data, error } = await supabase
-      .from("member")
-      .select("group_id")
-      .eq("user_id", userId)
-      .is("deleted_at", null)
-      .single();
-
-    if (error) {
-      console.error("Error fetching group ID:", error);
-      return null;
-    }
-
-    return data.group_id;
-  };
-
-  useEffect(() => {
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      if (session) {
-        const userId = session.user.id;
-        const fetchedGroupId = await fetchGroupId(userId);
-        if (fetchedGroupId) {
-          setGroupId(fetchedGroupId);
-          navigate(`/group/${fetchedGroupId}`);
-        }
-      }
-      setLoading(false);
-    });
-  }, [navigate]);
-
+  const { groupId, loading } = useLogin();
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">

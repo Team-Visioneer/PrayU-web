@@ -2,12 +2,12 @@ import { useState, useEffect, useCallback } from "react";
 import { supabase } from "../supaClient";
 import { useNavigate } from "react-router-dom";
 
-const useMember = () => {
+const useMember = (groupId) => {
   const [members, setMembers] = useState([]);
   const [session, setSession] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
-  const [loading, setLoading] = useState(true); // 로딩 상태 추가
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
@@ -17,13 +17,10 @@ const useMember = () => {
     } = await supabase.auth.getSession();
     setSession(session);
     if (session) {
-      await fetchMemberByGroupId(
-        "56e7b16b-7ba3-41b7-a850-fd4d0ce8d41e",
-        session.user.id
-      );
+      await fetchMemberByGroupId(groupId, session.user.id);
     }
-    setLoading(false); // 로딩 상태 변경
-  }, []);
+    setLoading(false);
+  }, [groupId]);
 
   useEffect(() => {
     fetchSession();
@@ -126,7 +123,7 @@ const useMember = () => {
     closeModal,
     handleLogout,
     selectedMember,
-    loading, // 로딩 상태 반환
+    loading,
   };
 };
 

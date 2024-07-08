@@ -3,12 +3,11 @@ import PrayCard from "./PrayCard";
 import useMember from "../hooks/useMember";
 import { useParams } from "react-router-dom";
 import useGroup from "../hooks/useGroup";
+import { ClipLoader } from "react-spinners"; // react-spinners에서 ClipLoader 가져오기
 
 const Group = () => {
   const { groupId } = useParams();
-
   const { groupName } = useGroup(groupId);
-
   const {
     members,
     session,
@@ -17,7 +16,16 @@ const Group = () => {
     closeModal,
     handleLogout,
     selectedMember,
+    loading, // useMember 훅에서 로딩 상태 가져오기
   } = useMember();
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <ClipLoader size={50} color={"#123abc"} loading={true} />
+      </div>
+    );
+  }
 
   if (!session) {
     return <div className="">Login Please</div>;

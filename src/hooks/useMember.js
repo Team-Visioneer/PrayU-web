@@ -1,28 +1,30 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { supabase } from "../supaClient";
+import { useNavigate } from "react-router-dom";
 
-const useMember = () => {
+const useMember = (groupId) => {
   const [members, setMembers] = useState([]);
   const [session, setSession] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchSession();
-  }, []);
+  const navigate = useNavigate();
 
-  const fetchSession = async () => {
+  const fetchSession = useCallback(async () => {
     const {
       data: { session },
     } = await supabase.auth.getSession();
     setSession(session);
     if (session) {
-      fetchMemberByGroupId(
-        "56e7b16b-7ba3-41b7-a850-fd4d0ce8d41e",
-        session.user.id
-      );
+      await fetchMemberByGroupId(groupId, session.user.id);
     }
-  };
+    setLoading(false);
+  }, [groupId]);
+
+  useEffect(() => {
+    fetchSession();
+  }, [fetchSession]);
 
   async function fetchMembers(group_id) {
     const { data, error } = await supabase
@@ -106,12 +108,11 @@ const useMember = () => {
   const closeModal = () => {
     setSelectedMember(null);
     setIsModalOpen(false);
-    //window.location.reload();
   };
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    window.location.reload();
+    navigate("/");
   };
 
   return {
@@ -122,6 +123,7 @@ const useMember = () => {
     closeModal,
     handleLogout,
     selectedMember,
+    loading,
   };
 };
 

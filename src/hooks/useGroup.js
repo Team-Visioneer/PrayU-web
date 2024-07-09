@@ -36,6 +36,8 @@ const useGroup = (paramsGroupId) => {
           } else {
             navigate(`/group-create`);
           }
+        } else {
+          navigate(`/Login`);
         }
       });
     }

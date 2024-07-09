@@ -27,7 +27,6 @@ const useGroup = (paramsGroupId) => {
     if (paramsGroupId) {
       fetchGroupName(paramsGroupId);
     } else {
-      console.log("here");
       supabase.auth.getSession().then(async ({ data: { session } }) => {
         if (session) {
           const userId = session.user.id;

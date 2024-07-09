@@ -63,16 +63,13 @@ export async function createGroup(userId, groupName, groupIntro) {
 
   const groupId = groupData[0].id;
 
-  const memberData = createMember(userId, groupId);
+  const memberData = await createMember(userId, groupId);
 
   memberData
-    .then((data) => {
-      console.log("member created", data);
-    })
+    .then((data) => {})
     .catch((error) => {
       console.error("Error creating member:", error);
     });
 
-  console.log("group created>>", groupData[0]);
   return groupData[0];
 }

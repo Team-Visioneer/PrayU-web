@@ -2,8 +2,8 @@ import { supabase } from "../supaClient";
 import { fetchProfiles } from "./profiles";
 import { fetchPrayCards } from "./pray_card";
 
-export function createMember(userId, groupId) {
-  return supabase
+export async function createMember(userId, groupId) {
+  const { data, error } = await supabase
     .from("member")
     .insert([
       {
@@ -12,6 +12,13 @@ export function createMember(userId, groupId) {
       },
     ])
     .select();
+
+  if (error) {
+    console.error("Error creating member:", error);
+    return null;
+  }
+
+  return data;
 }
 
 export async function fetchMembers(group_id) {

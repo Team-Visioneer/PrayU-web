@@ -41,7 +41,7 @@ const useGroup = (paramsGroupId) => {
         }
       });
     }
-  }, [paramsGroupId]);
+  }, [paramsGroupId, navigate]);
 
   const fetchGroupName = async (paramsGroupId) => {
     const { data, error } = await supabase

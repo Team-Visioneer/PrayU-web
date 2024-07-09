@@ -23,6 +23,7 @@ const useLogin = () => {
     return data.group_id;
   };
 
+  // TODO: paramsGroupId를 못가져오고 있나?
   useEffect(() => {
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session) {
@@ -30,12 +31,13 @@ const useLogin = () => {
         const fetchedGroupId = await fetchGroupId(userId);
         if (fetchedGroupId) {
           setGroupId(fetchedGroupId);
+          console.log(groupId);
           navigate(`/group/${fetchedGroupId}`);
         }
       }
       setLoading(false);
     });
-  }, [navigate]);
+  }, [navigate, groupId]);
 
   return { groupId, loading };
 };

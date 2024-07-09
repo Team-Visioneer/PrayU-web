@@ -5,6 +5,8 @@ import { fetchMemberByGroupId } from "../apis/member";
 import { fetchPrayData } from "../apis/pray";
 
 const useMember = (groupId) => {
+  console.log("useMember");
+  console.log(groupId);
   const [members, setMembers] = useState([]);
   const [prayCard, setPrayCard] = useState(null);
   const [prayData, setPrayData] = useState([]);

@@ -2,7 +2,15 @@ import PrayerList from "./PrayerList";
 import { AiOutlineEdit, AiOutlineSave, AiOutlineClose } from "react-icons/ai";
 import usePrayCard from "../hooks/usePrayCard";
 
-const PrayCard = ({ isOpen, onClose, member, prayCard, prayData, groupId }) => {
+const PrayCard = ({
+  isOpen,
+  onClose,
+  members,
+  member,
+  prayCard,
+  prayData,
+  groupId,
+}) => {
   const {
     isEditing,
     userInput,
@@ -61,7 +69,7 @@ const PrayCard = ({ isOpen, onClose, member, prayCard, prayData, groupId }) => {
         </div>
         {member.isCurrentUser && (
           <div className="mt-5 mb-5">
-            <PrayerList prayData={prayData} />
+            <PrayerList members={members} prayData={prayData} />
           </div>
         )}
         <button

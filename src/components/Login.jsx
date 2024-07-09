@@ -20,7 +20,7 @@ const Login = () => {
       <h3 className="text-center text-5xl mt-10">안녕하세요, PrayU입니다.</h3>
       <div className="justify-center mt-24 max-w-[300px]">
         <Auth
-          redirectTo={`http://localhost:5173/group/${groupId}`}
+          redirectTo={`${import.meta.env.VITE_BASE_URL}/group/${groupId}`}
           supabaseClient={supabase}
           appearance={{ theme: ThemeSupa }}
           onlyThirdPartyProviders

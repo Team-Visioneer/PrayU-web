@@ -21,7 +21,6 @@ const usePrayCard = (lastestPrayCard) => {
         group_id: groupId,
         content: userInput,
       });
-
       setIsEditing(false);
       return;
     }
@@ -37,9 +36,26 @@ const usePrayCard = (lastestPrayCard) => {
     setUserInput(e.target.value);
   };
 
-  const handlePrayClick = () => {
+  const handlePrayClick = async (prayCardId) => {
+    await supabase.from("pray").insert({
+      pray_card_id: prayCardId,
+    });
     setHasPrayed(true);
   };
+
+  async function fetchPray(prayCardId) {
+    const { data, error } = await supabase
+      .from("pray")
+      .select("*")
+      .eq("pray_card_id", prayCardId)
+      .is("deleted_at", null);
+
+    if (error) {
+      console.error("Error fetching members:", error);
+      return [];
+    }
+    return data;
+  }
 
   return {
     isEditing,
@@ -49,6 +65,7 @@ const usePrayCard = (lastestPrayCard) => {
     handleSaveClick,
     handleChange,
     handlePrayClick,
+    fetchPray,
   };
 };
 

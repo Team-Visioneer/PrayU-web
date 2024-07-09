@@ -2,8 +2,7 @@ import PrayerList from "./PrayerList";
 import { AiOutlineEdit, AiOutlineSave, AiOutlineClose } from "react-icons/ai";
 import usePrayCard from "../hooks/usePrayCard";
 
-const PrayCard = ({ isOpen, onClose, member, groupId }) => {
-  const lastestPrayCard = member.prayCards.at(-1);
+const PrayCard = ({ isOpen, onClose, member, prayCard, prayData, groupId }) => {
   const {
     isEditing,
     userInput,
@@ -12,7 +11,7 @@ const PrayCard = ({ isOpen, onClose, member, groupId }) => {
     handleSaveClick,
     handleChange,
     handlePrayClick,
-  } = usePrayCard(lastestPrayCard);
+  } = usePrayCard(prayCard);
 
   if (!isOpen) return null;
 
@@ -48,7 +47,7 @@ const PrayCard = ({ isOpen, onClose, member, groupId }) => {
           {member.isCurrentUser &&
             (isEditing ? (
               <AiOutlineSave
-                onClick={() => handleSaveClick(groupId, lastestPrayCard)}
+                onClick={() => handleSaveClick(groupId, prayCard)}
                 className="text-blue-500 cursor-pointer ml-2"
                 size={24}
               />
@@ -62,11 +61,11 @@ const PrayCard = ({ isOpen, onClose, member, groupId }) => {
         </div>
         {member.isCurrentUser && (
           <div className="mt-5 mb-5">
-            <PrayerList />
+            <PrayerList prayData={prayData} />
           </div>
         )}
         <button
-          onClick={handlePrayClick}
+          onClick={() => handlePrayClick(prayCard.id)}
           className={`px-4 py-2 rounded w-full mt-4 ${
             hasPrayed ? "bg-gray-500 text-white" : "bg-green-500 text-white"
           }`}

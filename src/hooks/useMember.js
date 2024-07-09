@@ -45,10 +45,11 @@ const useMember = (groupId) => {
     return data;
   }
 
-  async function fetchPrayCards(user_ids) {
+  async function fetchPrayCards(group_id, user_ids) {
     const { data, error } = await supabase
       .from("pray_card")
       .select("*")
+      .eq("group_id", group_id)
       .in("user_id", user_ids)
       .is("deleted_at", null)
       .order("created_at", { ascending: false });
@@ -79,7 +80,7 @@ const useMember = (groupId) => {
     const members = await fetchMembers(group_id);
     const user_ids = members.map((member) => member.user_id);
     const profiles = await fetchProfiles(user_ids);
-    const prayCards = await fetchPrayCards(user_ids);
+    const prayCards = await fetchPrayCards(group_id, user_ids);
     const userIdPrayCardHash = prayCards.reduce((acc, prayCard) => {
       const userId = prayCard.user_id;
       if (!acc[userId]) {

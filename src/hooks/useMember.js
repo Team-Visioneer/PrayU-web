@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "../supaClient";
 import { useNavigate } from "react-router-dom";
-import { fetchGroup } from "../apis/group";
 import { fetchMemberByGroupId } from "../apis/member";
 
 const useMember = (groupId) => {

@@ -15,14 +15,22 @@ const CreateGroup = () => {
 
     const { data, error } = await supabase
       .from("group")
-      .insert([{ user_id: userId, name: groupName, intro: "intro" }]); // TODO: intro를 넣는 것도 만들어?
+      .insert([{ user_id: userId, name: groupName, intro: "intro" }])
+      .select();
     if (error) {
       console.error("Error creating group:", error);
       alert("그룹 생성에 실패했습니다.");
     } else {
-      console.log("Group created:", data);
-      // TODO: Group id 받아서 경로에 넣기
-      navigate(`/`);
+      const groupId = data[0].id;
+      const { data_member, error } = await supabase
+        .from("member")
+        .insert([{ user_id: userId, group_id: groupId, pray_summary: "" }]);
+      if (error) {
+        console.error("Error create member:", error);
+      } else {
+        console.log(data_member);
+        navigate(`/group/${groupId}`);
+      }
     }
   };
 

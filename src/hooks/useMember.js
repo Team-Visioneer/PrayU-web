@@ -18,18 +18,22 @@ const useMember = (groupId) => {
   const fetchSession = useCallback(async () => {
     const {
       data: { session },
+      error,
     } = await supabase.auth.getSession();
     setSession(session);
     if (session) {
       const data = await fetchMemberByGroupId(groupId, session.user.id);
       setMembers(data);
     }
+    if (error) {
+      console.log(error);
+    }
     setLoading(false);
   }, [groupId]);
 
   useEffect(() => {
     fetchSession();
-  }, [fetchSession]);
+  }, [fetchSession, groupId]);
 
   const openModal = async (member, prayCard) => {
     const prayData = await fetchPrayData(prayCard.id);

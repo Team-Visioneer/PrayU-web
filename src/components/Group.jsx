@@ -21,7 +21,9 @@ const Group = () => {
     loading,
   } = useMember(groupId);
 
-  if (loading) {
+  const currentUser = members.find((member) => member.isCurrentUser);
+
+  if (loading || !currentUser) {
     return (
       <div className="flex justify-center items-center h-screen">
         <ClipLoader size={50} color={"#123abc"} loading={true} />
@@ -38,7 +40,7 @@ const Group = () => {
 
   return (
     <div>
-      <h3 className="text-center mt-10 text-3xl">{groupName} Group</h3>
+      <h3 className="text-center mt-10 text-3xl">Group: {groupName}</h3>
       <div className="mt-10">
         <h1 className="">My</h1>
         {currentMember ? (

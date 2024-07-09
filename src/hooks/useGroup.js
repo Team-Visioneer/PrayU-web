@@ -34,6 +34,8 @@ const useGroup = (paramsGroupId) => {
           const fetchedGroupId = await fetchGroupId(userId);
           if (fetchedGroupId) {
             navigate(`/group/${fetchedGroupId}`);
+          } else {
+            navigate(`/group-create`);
           }
         }
       });

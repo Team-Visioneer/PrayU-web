@@ -2,7 +2,6 @@ import { supabase } from "../supaClient";
 import { createMember } from "./member";
 
 export async function fetchGroupsByUserId(userId) {
-  // Fetch the groups where the user is a member
   const { data: memberData, error: memberError } = await supabase
     .from("member")
     .select("group_id")
@@ -20,7 +19,17 @@ export async function fetchGroupsByUserId(userId) {
 
   const groupIds = memberData.map((member) => member.group_id);
 
-  // Fetch group details for the group IDs
+  const groupData = await fetchGroupByGroupsId(groupIds);
+
+  if (groupData.length === 0) {
+    console.error("Error fetching group data:", groupData);
+    return [];
+  }
+
+  return groupData;
+}
+
+export async function fetchGroupByGroupsId(groupIds) {
   const { data: groupData, error: groupError } = await supabase
     .from("group")
     .select("*")
@@ -36,7 +45,6 @@ export async function fetchGroupsByUserId(userId) {
 }
 
 export async function createGroup(userId, groupName, groupIntro) {
-  // 그룹 생성
   const { data: groupData, error: groupError } = await supabase
     .from("group")
     .insert([
@@ -55,7 +63,6 @@ export async function createGroup(userId, groupName, groupIntro) {
 
   const groupId = groupData[0].id;
 
-  // 그룹 생성자가 자동으로 그룹의 멤버가 되도록 추가
   const memberData = createMember(userId, groupId);
 
   memberData

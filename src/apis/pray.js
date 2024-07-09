@@ -6,7 +6,6 @@ export async function fetchPray(prayCardId) {
     return { data: null, error: "Invalid prayCardId" };
   }
 
-  // Fetch prays for the given pray_card_id
   const { data, error } = await supabase
     .from("pray")
     .select("*")

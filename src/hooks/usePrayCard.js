@@ -43,20 +43,6 @@ const usePrayCard = (lastestPrayCard) => {
     setHasPrayed(true);
   };
 
-  async function fetchPray(prayCardId) {
-    const { data, error } = await supabase
-      .from("pray")
-      .select("*")
-      .eq("pray_card_id", prayCardId)
-      .is("deleted_at", null);
-
-    if (error) {
-      console.error("Error fetching members:", error);
-      return [];
-    }
-    return data;
-  }
-
   return {
     isEditing,
     userInput,
@@ -65,7 +51,6 @@ const usePrayCard = (lastestPrayCard) => {
     handleSaveClick,
     handleChange,
     handlePrayClick,
-    fetchPray,
   };
 };
 

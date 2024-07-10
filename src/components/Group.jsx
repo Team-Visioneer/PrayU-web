@@ -66,9 +66,10 @@ const Group = () => {
         <PrayCard
           isOpen={isModalOpen}
           onClose={closeModal}
-          members={members}
-          member={selectedMember}
           groupId={groupId}
+          members={members}
+          selectedMember={selectedMember}
+          currentMember={currentMember}
           prayCard={prayCard}
           prayData={prayData}
         />

@@ -5,11 +5,12 @@ import usePrayCard from "../hooks/usePrayCard";
 const PrayCard = ({
   isOpen,
   onClose,
+  groupId,
   members,
-  member,
+  selectedMember,
+  currentMember,
   prayCard,
   prayData,
-  groupId,
 }) => {
   const {
     isEditing,
@@ -33,17 +34,19 @@ const PrayCard = ({
           <AiOutlineClose size={24} />
         </button>
         <div className="flex items-center mb-4">
-          {member.avatar_url && (
+          {selectedMember.avatar_url && (
             <img
-              src={member.avatar_url}
-              alt={`${member.full_name}'s avatar`}
+              src={selectedMember.avatar_url}
+              alt={`${selectedMember.full_name}'s avatar`}
               className="w-10 h-10 rounded-full mr-4"
             />
           )}
-          <h2 className="text-xl font-bold">{member.full_name}의 기도제목</h2>
+          <h2 className="text-xl font-bold">
+            {selectedMember.full_name}의 기도제목
+          </h2>
         </div>
         <div className="flex justify-between items-center mb-4">
-          {isEditing && member.isCurrentUser ? (
+          {isEditing && selectedMember.isCurrentUser ? (
             <textarea
               value={userInput}
               onChange={handleChange}
@@ -52,7 +55,7 @@ const PrayCard = ({
           ) : (
             <p>{userInput}</p>
           )}
-          {member.isCurrentUser &&
+          {selectedMember.isCurrentUser &&
             (isEditing ? (
               <AiOutlineSave
                 onClick={() => handleSaveClick(groupId, prayCard)}
@@ -67,11 +70,14 @@ const PrayCard = ({
               />
             ))}
         </div>
-        {member.isCurrentUser && (
-          <div className="mt-5 mb-5">
-            <PrayerList members={members} prayData={prayData} />
-          </div>
-        )}
+        <div className="mt-5 mb-5">
+          <PrayerList
+            members={members}
+            selectedMember={selectedMember}
+            currentMember={currentMember}
+            prayData={prayData}
+          />
+        </div>
         <button
           onClick={() => handlePrayClick(prayCard.id)}
           className={`px-4 py-2 rounded w-full mt-4 ${

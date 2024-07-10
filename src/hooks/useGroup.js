@@ -30,7 +30,9 @@ const useGroup = (paramsGroupId) => {
       supabase.auth.getSession().then(async ({ data: { session } }) => {
         if (session) {
           const userId = session.user.id;
+          console.log(userId);
           const fetchedGroupId = await fetchGroupId(userId);
+          console.log(fetchGroupId);
           if (fetchedGroupId) {
             navigate(`/group/${fetchedGroupId}`);
           } else {

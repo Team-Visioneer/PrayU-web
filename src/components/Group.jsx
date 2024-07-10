@@ -1,12 +1,11 @@
 import Profile from "./Profile";
 import PrayCard from "./PrayCard";
 import useMember from "../hooks/useMember";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import useGroup from "../hooks/useGroup";
 import { ClipLoader } from "react-spinners";
 
 const Group = () => {
-  const navigate = useNavigate();
   const { groupId } = useParams();
   const { groupName } = useGroup(groupId);
   const {
@@ -23,10 +22,6 @@ const Group = () => {
   } = useMember(groupId);
 
   const currentUser = members.find((member) => member.isCurrentUser);
-
-  if (!session) {
-    return navigate(`/Login/${groupId}`);
-  }
 
   if (loading || !currentUser) {
     return (

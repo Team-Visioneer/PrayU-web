@@ -40,7 +40,7 @@ export async function fetchMemberByGroupId(
   currentUserId,
   lastInsertTimeRef
 ) {
-  const members = await fetchMembers(group_id);
+  let members = await fetchMembers(group_id);
   const user_ids = members.map((member) => member.user_id);
   const profiles = await fetchProfiles(user_ids);
   const prayCards = await fetchPrayCards(user_ids);
@@ -75,6 +75,8 @@ export async function fetchMemberByGroupId(
       console.error("Error adding current user to members:", error);
       return;
     }
+
+    members = await fetchMembers(group_id);
   }
 
   if (members.length === 0) {

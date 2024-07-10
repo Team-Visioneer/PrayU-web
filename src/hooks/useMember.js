@@ -3,7 +3,7 @@ import { supabase } from "../supaClient";
 import { useNavigate } from "react-router-dom";
 import { fetchMemberByGroupId } from "../apis/member";
 import { fetchPrayData } from "../apis/pray";
-import { fetchGroupsByUserId } from "../apis/group";
+import { fetchGroupId } from "../apis/group";
 
 const useMember = (groupId) => {
   const [members, setMembers] = useState([]);
@@ -22,16 +22,18 @@ const useMember = (groupId) => {
       error,
     } = await supabase.auth.getSession();
     if (session) {
-      const data = await fetchMemberByGroupId(
-        groupId,
-        session.user.id,
-        lastInsertTimeRef
-      );
-      setMembers(data);
       if (groupId) {
-        await fetchMemberByGroupId(groupId, session.user.id);
+        const members = await fetchMemberByGroupId(
+          groupId,
+          session.user.id,
+          lastInsertTimeRef
+        );
+        console.log("members");
+        console.log(members);
+        setMembers(members);
       } else {
-        const _groupId = await fetchGroupsByUserId(session.user.id)[0].groupId;
+        const _groupId = await fetchGroupId(session.user.id);
+        console.log(_groupId);
         return navigate(`/Group/${_groupId}`);
       }
     } else {
@@ -42,7 +44,7 @@ const useMember = (groupId) => {
       console.log(error);
     }
     setLoading(false);
-  }, [groupId]);
+  }, [groupId, members]);
 
   useEffect(() => {
     fetchSession();

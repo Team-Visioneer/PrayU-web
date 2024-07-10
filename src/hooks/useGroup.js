@@ -19,7 +19,7 @@ const useGroup = (paramsGroupId) => {
       return null;
     }
 
-    return data[0].group_id;
+    return data[0];
   };
 
   useEffect(() => {
@@ -28,7 +28,9 @@ const useGroup = (paramsGroupId) => {
     } else {
       supabase.auth.getSession().then(async ({ data: { session } }) => {
         if (session) {
+          console.log("has session");
           const userId = session.user.id;
+          console.log(userId);
           const fetchedGroupId = await fetchGroupId(userId);
           if (fetchedGroupId) {
             navigate(`/group/${fetchedGroupId}`);

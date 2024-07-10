@@ -17,6 +17,7 @@ const Login = () => {
     );
   }
 
+  console.log(paramsGroupId);
   const redirectUrl = paramsGroupId
     ? `${import.meta.env.VITE_BASE_URL}/group/${paramsGroupId}`
     : `${import.meta.env.VITE_BASE_URL}/group/${groupId}`;

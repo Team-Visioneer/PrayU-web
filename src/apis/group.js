@@ -62,3 +62,18 @@ export async function createGroup(userId, groupName, groupIntro) {
 
   return groupData[0];
 }
+
+export async function fetchGroupId(userId) {
+  const { data, error } = await supabase
+    .from("member")
+    .select("group_id")
+    .eq("user_id", userId)
+    .is("deleted_at", null);
+
+  if (error) {
+    console.error("Error fetching group ID:", error);
+    return null;
+  }
+
+  return data[0].group_id;
+}

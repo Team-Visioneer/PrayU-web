@@ -12,7 +12,6 @@ const Group = () => {
     members,
     prayCard,
     prayData,
-    session,
     isModalOpen,
     openModal,
     closeModal,
@@ -21,22 +20,16 @@ const Group = () => {
     loading,
   } = useMember(groupId);
 
-  const currentUser = members.find((member) => member.isCurrentUser);
+  const currentMember = members.find((member) => member.isCurrentUser);
+  const otherMembers = members.filter((member) => !member.isCurrentUser);
 
-  if (loading || !currentUser) {
+  if (loading || !currentMember) {
     return (
       <div className="flex justify-center items-center h-screen">
         <ClipLoader size={50} color={"#123abc"} loading={true} />
       </div>
     );
   }
-
-  if (!session) {
-    return <div className="">Login Please</div>;
-  }
-
-  const currentMember = members.find((member) => member.isCurrentUser);
-  const otherMembers = members.filter((member) => !member.isCurrentUser);
 
   return (
     <div>
@@ -50,7 +43,7 @@ const Group = () => {
             avatar_url={currentMember.avatar_url}
           />
         ) : (
-          <div className="">No current user found</div>
+          <div className="text-red-500">No current user found</div>
         )}
       </div>
       <div className="mt-10">

@@ -18,7 +18,7 @@ const useGroup = (paramsGroupId) => {
       console.error("Error fetching group ID:", error);
       return null;
     }
-
+    if (data[0]) return data[0].group_id;
     return data[0];
   };
 
@@ -28,9 +28,7 @@ const useGroup = (paramsGroupId) => {
     } else {
       supabase.auth.getSession().then(async ({ data: { session } }) => {
         if (session) {
-          console.log("has session");
           const userId = session.user.id;
-          console.log(userId);
           const fetchedGroupId = await fetchGroupId(userId);
           if (fetchedGroupId) {
             navigate(`/group/${fetchedGroupId}`);
@@ -38,7 +36,7 @@ const useGroup = (paramsGroupId) => {
             navigate(`/group-create`);
           }
         } else {
-          navigate(`/Login`);
+          navigate(`/login`);
         }
       });
     }

@@ -10,6 +10,8 @@ const Group = () => {
   const { groupName } = useGroup(groupId);
   const {
     members,
+    prayCard,
+    prayData,
     session,
     isModalOpen,
     openModal,
@@ -31,7 +33,7 @@ const Group = () => {
     return <div className="">Login Please</div>;
   }
 
-  const currentUser = members.find((member) => member.isCurrentUser);
+  const currentMember = members.find((member) => member.isCurrentUser);
   const otherMembers = members.filter((member) => !member.isCurrentUser);
 
   return (
@@ -39,11 +41,11 @@ const Group = () => {
       <h3 className="text-center mt-10 text-3xl">{groupName} Group</h3>
       <div className="mt-10">
         <h1 className="">My</h1>
-        {currentUser ? (
+        {currentMember ? (
           <Profile
-            onClick={() => openModal(currentUser)}
-            name={currentUser.full_name}
-            avatar_url={currentUser.avatar_url}
+            onClick={() => openModal(currentMember, currentMember.prayCards[0])}
+            name={currentMember.full_name}
+            avatar_url={currentMember.avatar_url}
           />
         ) : (
           <div className="">No current user found</div>
@@ -56,7 +58,7 @@ const Group = () => {
             <Profile
               key={member.id}
               name={member.full_name}
-              onClick={() => openModal(member)}
+              onClick={() => openModal(member, member.prayCards[0])}
               avatar_url={member.avatar_url}
             />
           ))}
@@ -69,8 +71,11 @@ const Group = () => {
         <PrayCard
           isOpen={isModalOpen}
           onClose={closeModal}
+          members={members}
           member={selectedMember}
           groupId={groupId}
+          prayCard={prayCard}
+          prayData={prayData}
         />
       )}
     </div>

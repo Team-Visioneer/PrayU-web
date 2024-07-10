@@ -2,9 +2,12 @@ import { useState, useEffect, useCallback } from "react";
 import { supabase } from "../supaClient";
 import { useNavigate } from "react-router-dom";
 import { fetchMemberByGroupId } from "../apis/member";
+import { fetchPrayData } from "../apis/pray";
 
 const useMember = (groupId) => {
   const [members, setMembers] = useState([]);
+  const [prayCard, setPrayCard] = useState(null);
+  const [prayData, setPrayData] = useState([]);
   const [session, setSession] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
@@ -28,7 +31,10 @@ const useMember = (groupId) => {
     fetchSession();
   }, [fetchSession]);
 
-  const openModal = (member) => {
+  const openModal = async (member, prayCard) => {
+    const prayData = await fetchPrayData(prayCard.id);
+    setPrayCard(prayCard);
+    setPrayData(prayData);
     setSelectedMember(member);
     setIsModalOpen(true);
   };
@@ -45,6 +51,8 @@ const useMember = (groupId) => {
 
   return {
     members,
+    prayCard,
+    prayData,
     session,
     isModalOpen,
     openModal,

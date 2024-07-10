@@ -68,7 +68,8 @@ const Group = () => {
           onClose={closeModal}
           groupId={groupId}
           members={members}
-          member={selectedMember}
+          selectedMember={selectedMember}
+          currentMember={currentMember}
           prayCard={prayCard}
           prayData={prayData}
         />

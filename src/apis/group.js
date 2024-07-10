@@ -1,5 +1,4 @@
 import { supabase } from "../supaClient";
-import { createMember } from "./member";
 
 export async function fetchGroupsByUserId(userId) {
   const { data: memberData, error: memberError } = await supabase
@@ -61,9 +60,20 @@ export async function createGroup(userId, groupName, groupIntro) {
     return null;
   }
 
-  const groupId = groupData[0].id;
-
-  const memberData = await createMember(userId, groupId);
-
   return groupData[0];
+}
+
+export async function fetchGroupId(userId) {
+  const { data, error } = await supabase
+    .from("member")
+    .select("group_id")
+    .eq("user_id", userId)
+    .is("deleted_at", null);
+
+  if (error) {
+    console.error("Error fetching group ID:", error);
+    return null;
+  }
+
+  return data[0].group_id;
 }

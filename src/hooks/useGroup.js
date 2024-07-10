@@ -12,33 +12,37 @@ const useGroup = (paramsGroupId) => {
       .from("member")
       .select("group_id")
       .eq("user_id", userId)
-      .is("deleted_at", null)
-      .single();
+      .is("deleted_at", null);
 
     if (error) {
       console.error("Error fetching group ID:", error);
       return null;
     }
 
-    return data.group_id;
+    return data[0];
   };
 
   useEffect(() => {
     if (paramsGroupId) {
       fetchGroupName(paramsGroupId);
     } else {
-      console.log("here");
       supabase.auth.getSession().then(async ({ data: { session } }) => {
         if (session) {
+          console.log("has session");
           const userId = session.user.id;
+          console.log(userId);
           const fetchedGroupId = await fetchGroupId(userId);
           if (fetchedGroupId) {
             navigate(`/group/${fetchedGroupId}`);
+          } else {
+            navigate(`/group-create`);
           }
+        } else {
+          navigate(`/Login`);
         }
       });
     }
-  }, [paramsGroupId]);
+  }, [paramsGroupId, navigate]);
 
   const fetchGroupName = async (paramsGroupId) => {
     const { data, error } = await supabase

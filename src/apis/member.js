@@ -41,17 +41,6 @@ export async function fetchMemberByGroupId(
   lastInsertTimeRef
 ) {
   let members = await fetchMembers(group_id);
-  const user_ids = members.map((member) => member.user_id);
-  const profiles = await fetchProfiles(user_ids);
-  const prayCards = await fetchPrayCards(user_ids);
-  const userIdPrayCardHash = prayCards.reduce((acc, prayCard) => {
-    const userId = prayCard.user_id;
-    if (!acc[userId]) {
-      acc[userId] = [];
-    }
-    acc[userId].push(prayCard);
-    return acc;
-  }, {});
 
   const currentUserInMembers = members.some(
     (member) => member.user_id === currentUserId
@@ -67,17 +56,34 @@ export async function fetchMemberByGroupId(
 
     console.log("Current user not in members, adding to member table");
 
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from("member")
-      .insert([{ user_id: currentUserId, group_id }]);
+      .insert([{ user_id: currentUserId, group_id }])
+      .select();
 
     if (error) {
       console.error("Error adding current user to members:", error);
       return;
     }
 
-    members = await fetchMembers(group_id);
+    console.log("member.js");
+    console.log(data[0].group_id);
+    members = await fetchMembers(data[0].group_id);
+    console.log(members);
+    return members;
   }
+
+  const user_ids = members.map((member) => member.user_id);
+  const profiles = await fetchProfiles(user_ids);
+  const prayCards = await fetchPrayCards(user_ids);
+  const userIdPrayCardHash = prayCards.reduce((acc, prayCard) => {
+    const userId = prayCard.user_id;
+    if (!acc[userId]) {
+      acc[userId] = [];
+    }
+    acc[userId].push(prayCard);
+    return acc;
+  }, {});
 
   if (members.length === 0) {
     console.log("No members found for the group");

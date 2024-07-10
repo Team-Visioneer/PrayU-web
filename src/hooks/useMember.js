@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { supabase } from "../supaClient";
 import { useNavigate } from "react-router-dom";
 import { fetchMemberByGroupId } from "../apis/member";
@@ -16,39 +16,54 @@ const useMember = (groupId) => {
 
   const navigate = useNavigate();
 
-  const fetchSession = useCallback(async () => {
-    const {
-      data: { session },
-      error,
-    } = await supabase.auth.getSession();
-    if (session) {
-      if (groupId) {
-        const members = await fetchMemberByGroupId(
-          groupId,
-          session.user.id,
-          lastInsertTimeRef
-        );
-        console.log("members");
-        console.log(members);
-        setMembers(members);
-      } else {
-        const _groupId = await fetchGroupId(session.user.id);
-        console.log(_groupId);
-        return navigate(`/Group/${_groupId}`);
+  const fetchSession = async (retry = true) => {
+    try {
+      const {
+        data: { session },
+        error,
+      } = await supabase.auth.getSession();
+      if (error) {
+        console.log("Error fetching session:", error);
+        setLoading(false);
+        return;
       }
-    } else {
-      console.log("No session found");
-      return navigate(`/Login/${groupId}`);
+
+      if (session) {
+        if (groupId) {
+          let members = await fetchMemberByGroupId(
+            groupId,
+            session.user.id,
+            lastInsertTimeRef
+          );
+
+          if (!members || members.length === 0) {
+            if (retry) {
+              await fetchSession(false); // 재시도
+            } else {
+              console.error("Failed to fetch members after retry.");
+            }
+          } else {
+            setMembers(members);
+          }
+        } else {
+          const _groupId = await fetchGroupId(session.user.id);
+          console.log(`_groupId:${_groupId}`);
+          return navigate(`/group/${_groupId}`);
+        }
+      } else {
+        console.log("No session found");
+        return navigate(`/login/${groupId}`);
+      }
+    } catch (err) {
+      console.error("Unexpected error:", err);
+    } finally {
+      setLoading(false);
     }
-    if (error) {
-      console.log(error);
-    }
-    setLoading(false);
-  }, [groupId, members]);
+  };
 
   useEffect(() => {
     fetchSession();
-  }, [fetchSession, groupId]);
+  }, [groupId]);
 
   const openModal = async (member, prayCard) => {
     const prayData = await fetchPrayData(prayCard.id);

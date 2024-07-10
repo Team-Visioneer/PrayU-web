@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 
 const Login = () => {
   const { paramsGroupId } = useParams();
-  const { groupId, loading } = useLogin(paramsGroupId);
+  const { groupId, loading } = useLogin();
 
   if (loading) {
     return (
@@ -17,7 +17,6 @@ const Login = () => {
     );
   }
 
-  console.log(paramsGroupId);
   const redirectUrl = paramsGroupId
     ? `${import.meta.env.VITE_BASE_URL}/group/${paramsGroupId}`
     : `${import.meta.env.VITE_BASE_URL}/group/${groupId}`;

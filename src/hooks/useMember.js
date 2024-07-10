@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { supabase } from "../supaClient";
 import { useNavigate } from "react-router-dom";
 import { fetchMemberByGroupId } from "../apis/member";
 import { fetchPrayData } from "../apis/pray";
+import { fetchGroupsByUserId } from "../apis/group";
 
 const useMember = (groupId) => {
   const [members, setMembers] = useState([]);
@@ -11,20 +12,28 @@ const useMember = (groupId) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
   const [loading, setLoading] = useState(true);
+  const lastInsertTimeRef = useRef(0);
 
   const navigate = useNavigate();
 
   const fetchSession = useCallback(async () => {
-    console.log("fetchSession called");
     const {
       data: { session },
       error,
     } = await supabase.auth.getSession();
     if (session) {
-      const data = await fetchMemberByGroupId(groupId, session.user.id);
+      const data = await fetchMemberByGroupId(
+        groupId,
+        session.user.id,
+        lastInsertTimeRef
+      );
       setMembers(data);
-      console.log("Session found:", session);
-      await fetchMemberByGroupId(groupId, session.user.id);
+      if (groupId) {
+        await fetchMemberByGroupId(groupId, session.user.id);
+      } else {
+        const _groupId = await fetchGroupsByUserId(session.user.id)[0].groupId;
+        return navigate(`/Group/${_groupId}`);
+      }
     } else {
       console.log("No session found");
       return navigate(`/Login/${groupId}`);

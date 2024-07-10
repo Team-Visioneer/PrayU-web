@@ -32,11 +32,14 @@ export async function fetchMembers(group_id) {
     console.error("Error fetching members:", error);
     return [];
   }
-
   return data;
 }
 
-export async function fetchMemberByGroupId(group_id, currentUserId) {
+export async function fetchMemberByGroupId(
+  group_id,
+  currentUserId,
+  lastInsertTimeRef
+) {
   const members = await fetchMembers(group_id);
   const user_ids = members.map((member) => member.user_id);
   const profiles = await fetchProfiles(user_ids);
@@ -50,6 +53,34 @@ export async function fetchMemberByGroupId(group_id, currentUserId) {
     return acc;
   }, {});
 
+  const currentUserInMembers = members.some(
+    (member) => member.user_id === currentUserId
+  );
+
+  if (!currentUserInMembers) {
+    const now = Date.now();
+    if (now - lastInsertTimeRef.current < 10000) {
+      console.log("Insert prevented due to time limit");
+      return;
+    }
+    lastInsertTimeRef.current = now;
+
+    console.log("Current user not in members, adding to member table");
+
+    const { error } = await supabase
+      .from("member")
+      .insert([{ user_id: currentUserId, group_id }]);
+
+    if (error) {
+      console.error("Error adding current user to members:", error);
+      return;
+    }
+  }
+
+  if (members.length === 0) {
+    console.log("No members found for the group");
+    return;
+  }
   const membersWithProfiles = members.map((member) => ({
     ...member,
     full_name:

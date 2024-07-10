@@ -8,7 +8,6 @@ import useAuth from "../hooks/useAuth";
 
 const Group = () => {
   const { user } = useAuth();
-  console.log(user);
 
   const { groupId } = useParams();
   const { groupName } = useGroup(groupId);

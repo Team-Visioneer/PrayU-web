@@ -21,7 +21,6 @@ const Login = () => {
     ? `${import.meta.env.VITE_BASE_URL}/group/${paramsGroupId}`
     : `${import.meta.env.VITE_BASE_URL}/group/${groupId}`;
 
-  console.log(redirectUrl);
   return (
     <div className="flex flex-col justify-center items-center">
       <h3 className="text-center text-5xl mt-10">안녕하세요, PrayU입니다.</h3>

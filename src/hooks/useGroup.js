@@ -12,15 +12,14 @@ const useGroup = (paramsGroupId) => {
       .from("member")
       .select("group_id")
       .eq("user_id", userId)
-      .is("deleted_at", null)
-      .single();
+      .is("deleted_at", null);
 
     if (error) {
       console.error("Error fetching group ID:", error);
       return null;
     }
 
-    return data.group_id;
+    return data[0].group_id;
   };
 
   useEffect(() => {

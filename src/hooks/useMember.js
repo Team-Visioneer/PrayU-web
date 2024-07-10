@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { supabase } from "../supaClient";
 import { useNavigate } from "react-router-dom";
 import { fetchMemberByGroupId } from "../apis/member";
+import { fetchPrayData } from "../apis/pray";
 
 const useMember = (groupId) => {
   const [members, setMembers] = useState([]);
@@ -29,21 +30,6 @@ const useMember = (groupId) => {
   useEffect(() => {
     fetchSession();
   }, [fetchSession]);
-
-  const fetchPrayData = async (prayCardId) => {
-    const { data, error } = await supabase
-      .from("pray")
-      .select("*")
-      .eq("pray_card_id", prayCardId)
-      .is("deleted_at", null);
-
-    if (error) {
-      console.error("Error fetching pray:", error);
-      return [];
-    }
-
-    return data;
-  };
 
   const openModal = async (member, prayCard) => {
     const prayData = await fetchPrayData(prayCard.id);

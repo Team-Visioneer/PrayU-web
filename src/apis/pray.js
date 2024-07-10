@@ -1,11 +1,6 @@
 import { supabase } from "../supaClient";
 
-export async function fetchPray(prayCardId) {
-  if (!prayCardId) {
-    console.error("Invalid prayCardId");
-    return { data: null, error: "Invalid prayCardId" };
-  }
-
+export const fetchPrayData = async (prayCardId) => {
   const { data, error } = await supabase
     .from("pray")
     .select("*")
@@ -13,9 +8,9 @@ export async function fetchPray(prayCardId) {
     .is("deleted_at", null);
 
   if (error) {
-    console.error("Error fetching prays:", error.message);
-    return { data: null, error: error.message };
+    console.error("Error fetching pray:", error);
+    return [];
   }
 
-  return { data, error: null };
-}
+  return data;
+};

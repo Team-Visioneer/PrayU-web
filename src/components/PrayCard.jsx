@@ -5,11 +5,11 @@ import usePrayCard from "../hooks/usePrayCard";
 const PrayCard = ({
   isOpen,
   onClose,
+  groupId,
   members,
   member,
   prayCard,
   prayData,
-  groupId,
 }) => {
   const {
     isEditing,

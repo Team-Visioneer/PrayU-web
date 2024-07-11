@@ -16,3 +16,17 @@ export async function fetchGroupPrayCards(groupId, userIds) {
 
   return data;
 }
+
+export async function createPrayCards(userId, groupId) {
+  const { data, error } = await supabase
+    .from("pray_card")
+    .insert([
+      {
+        user_id: userId,
+        group_id: groupId,
+      },
+    ])
+    .select();
+
+  if (error) console.log(`Error in createPrayCards: ${error}`);
+}

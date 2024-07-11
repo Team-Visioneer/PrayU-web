@@ -1,4 +1,5 @@
 import CreateGroup from "./components/CreateGroup";
+import CreatePrayCard from "./components/CreatePrayCard";
 import Group from "./components/Group";
 import Login from "./components/Login";
 import Main from "./components/Main";
@@ -28,6 +29,10 @@ const App = () => {
               ></Route>
               <Route path="/group/" element={<Group />}></Route>
               <Route path="/group-create" element={<CreateGroup />}></Route>
+              <Route
+                path="/create-praycard"
+                element={<CreatePrayCard />}
+              ></Route>
               <Route path="*" element={<NotFound />}></Route>
             </Routes>
           </AuthProvider>

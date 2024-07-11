@@ -4,7 +4,7 @@ import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 
 // TODO: groupName받아서 아래 Visioneer 대신에 넣어야됨
-const CreatePrayCard = (groupName) => {
+const CreatePrayCard = () => {
   const navigate = useNavigate();
   const [prayerText, setPrayerText] = useState("");
 
@@ -12,8 +12,8 @@ const CreatePrayCard = (groupName) => {
     if (prayerText.trim() === "") {
       alert("기도제목을 작성해주셔야 그룹원들을 위해 기도할 수 있어요");
     } else {
-      // TODO: 저장하면 group으로 보내주어야 함!!
-      navigate("/");
+      // TODO: 저장하면 DB에 넣어줘야함!
+      navigate("/group-pray");
     }
   };
 

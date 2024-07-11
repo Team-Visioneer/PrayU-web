@@ -1,10 +1,13 @@
 import { supabase } from "../supaClient";
 
-export const fetchPrayData = async (prayCardId) => {
+export const fetchPrayData = async (prayCard) => {
+  if (!prayCard) {
+    return [];
+  }
   const { data, error } = await supabase
     .from("pray")
     .select("*")
-    .eq("pray_card_id", prayCardId)
+    .eq("pray_card_id", prayCard.id)
     .is("deleted_at", null);
 
   if (error) {

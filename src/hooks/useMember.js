@@ -66,7 +66,7 @@ const useMember = (groupId) => {
   }, [groupId]);
 
   const openModal = async (member, prayCard) => {
-    const prayData = await fetchPrayData(prayCard.id);
+    const prayData = await fetchPrayData(prayCard);
     setPrayCard(prayCard);
     setPrayData(prayData);
     setSelectedMember(member);

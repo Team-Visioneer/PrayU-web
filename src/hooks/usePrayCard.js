@@ -36,9 +36,13 @@ const usePrayCard = (lastestPrayCard) => {
     setUserInput(e.target.value);
   };
 
-  const handlePrayClick = async (prayCardId) => {
+  const handlePrayClick = async (prayCard) => {
+    if (!prayCard) {
+      console.error("prayCard is not defined");
+      return null;
+    }
     await supabase.from("pray").insert({
-      pray_card_id: prayCardId,
+      pray_card_id: prayCard.id,
     });
     setHasPrayed(true);
   };

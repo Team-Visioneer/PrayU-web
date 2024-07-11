@@ -26,7 +26,7 @@ const usePrayCard = (lastestPrayCard) => {
     }
     await supabase
       .from("pray_card")
-      .update({ content: userInput })
+      .update({ content: userInput, updated_at: new Date() })
       .eq("id", prayCard.id);
 
     setIsEditing(false);

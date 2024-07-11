@@ -19,7 +19,7 @@ const Profile = ({ member, onClick }) => {
         {member.prayCards[0]?.content || "아직 기도제목이 없어요"}
       </div>
       <div className="text-gray-500">
-        {formatDateString(member.prayCards[0]?.created_at) || "-"}
+        {formatDateString(member.prayCards[0]?.updated_at) || "-"}
       </div>
     </div>
   );

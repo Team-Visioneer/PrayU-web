@@ -79,7 +79,7 @@ const PrayCard = ({
           />
         </div>
         <button
-          onClick={() => handlePrayClick(prayCard.id)}
+          onClick={() => handlePrayClick(prayCard)}
           className={`px-4 py-2 rounded w-full mt-4 ${
             hasPrayed ? "bg-gray-500 text-white" : "bg-green-500 text-white"
           }`}

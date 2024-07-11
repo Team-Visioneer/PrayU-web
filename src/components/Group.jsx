@@ -41,9 +41,8 @@ const Group = () => {
         <h1 className="">My</h1>
         {currentMember ? (
           <Profile
+            member={currentMember}
             onClick={() => openModal(currentMember, currentMember.prayCards[0])}
-            name={currentMember.full_name}
-            avatar_url={currentMember.avatar_url}
           />
         ) : (
           <div className="text-red-500">No current user found</div>
@@ -55,9 +54,8 @@ const Group = () => {
           {otherMembers.map((member) => (
             <Profile
               key={member.id}
-              name={member.full_name}
+              member={member}
               onClick={() => openModal(member, member.prayCards[0])}
-              avatar_url={member.avatar_url}
             />
           ))}
         </ul>

@@ -1,6 +1,6 @@
 import { supabase } from "../supaClient";
 import { fetchProfiles } from "./profiles";
-import { fetchPrayCards } from "./pray_card";
+import { fetchGroupPrayCards } from "./pray_card";
 
 export async function createMember(userId, groupId) {
   const { data, error } = await supabase
@@ -36,14 +36,14 @@ export async function fetchMembers(group_id) {
 }
 
 export async function fetchMemberByGroupId(
-  group_id,
+  groupId,
   currentUserId,
   lastInsertTimeRef
 ) {
-  let members = await fetchMembers(group_id);
-  const user_ids = members.map((member) => member.user_id);
-  const profiles = await fetchProfiles(user_ids);
-  const prayCards = await fetchPrayCards(user_ids);
+  let members = await fetchMembers(groupId);
+  const userIds = members.map((member) => member.user_id);
+  const profiles = await fetchProfiles(userIds);
+  const prayCards = await fetchGroupPrayCards(groupId, userIds);
   const userIdPrayCardHash = prayCards.reduce((acc, prayCard) => {
     const userId = prayCard.user_id;
     if (!acc[userId]) {
@@ -66,7 +66,7 @@ export async function fetchMemberByGroupId(
 
     const { data, error } = await supabase
       .from("member")
-      .insert([{ user_id: currentUserId, group_id }])
+      .insert([{ user_id: currentUserId, groupId }])
       .select();
 
     if (error) {

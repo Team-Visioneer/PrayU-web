@@ -3,8 +3,11 @@ import { ClipLoader } from "react-spinners";
 import MyProfile from "../components/MyProfile";
 import OtherProfiles from "../components/OtherProfiles";
 import CreatePrayCard from "./CreatePrayCard";
+import PrayDrawer from "./PrayDrawer";
+import { useState } from "react";
 
 const Members = ({ groupId }) => {
+  const [prayDone, setPrayDone] = useState(false);
   const {
     members,
     prayCard,
@@ -29,24 +32,33 @@ const Members = ({ groupId }) => {
   }
 
   if (currentMember.prayCards[0]?.content) {
-    return (
-      <div>
-        <MyProfile member={currentMember} openFunction={openModal} />
-        <OtherProfiles
-          otherMembers={otherMembers}
-          openModal={openModal}
-          handleLogout={handleLogout}
-          selectedMember={selectedMember}
-          isModalOpen={isModalOpen}
-          closeModal={closeModal}
-          groupId={groupId}
-          members={members}
-          currentMember={currentMember}
-          prayCard={prayCard}
-          prayData={prayData}
-        />
-      </div>
-    );
+    if (prayDone) {
+      return (
+        <div>
+          <MyProfile member={currentMember} openFunction={openModal} />
+          <OtherProfiles
+            otherMembers={otherMembers}
+            openModal={openModal}
+            handleLogout={handleLogout}
+            selectedMember={selectedMember}
+            isModalOpen={isModalOpen}
+            closeModal={closeModal}
+            groupId={groupId}
+            members={members}
+            currentMember={currentMember}
+            prayCard={prayCard}
+            prayData={prayData}
+          />
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <MyProfile member={currentMember} openFunction={openModal} />
+          <PrayDrawer otherMembers={otherMembers} setPrayDone={setPrayDone} />
+        </div>
+      );
+    }
   } else {
     return <CreatePrayCard member={currentMember} />;
   }

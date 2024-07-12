@@ -7,7 +7,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./components/AuthProvider";
 import LoginPage from "./pages/LoginPage";
 import PrivateRoute from "./components/PrivateRoute";
-import DoPray from "./components/DoPray";
 import GroupPage from "./pages/GroupPage";
 
 const App = () => {
@@ -34,7 +33,6 @@ const App = () => {
                 path="/create-praycard"
                 element={<CreatePrayCard />}
               ></Route>
-              <Route path="/group-pray" element={<DoPray />}></Route>
               <Route path="*" element={<NotFound />}></Route>
             </Routes>
           </AuthProvider>

@@ -31,7 +31,7 @@ const App = () => {
                   </PrivateRoute>
                 }
               ></Route>
-              <Route path="/group-create" element={<CreateGroup />}></Route>
+              <Route path="/group/new" element={<CreateGroup />}></Route>
               <Route
                 path="/create-praycard"
                 element={<PrayCardCreateForm />}

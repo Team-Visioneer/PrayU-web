@@ -1,26 +1,14 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
+import useCreatePrayCard from "../hooks/useCreatePrayCard";
 
-// TODO: groupName받아서 아래 Visioneer 대신에 넣어야됨
-const CreatePrayCard = () => {
-  const navigate = useNavigate();
-  const [prayerText, setPrayerText] = useState("");
-
-  const handleButtonClick = () => {
-    if (prayerText.trim() === "") {
-      alert("기도제목을 작성해주셔야 그룹원들을 위해 기도할 수 있어요");
-    } else {
-      // TODO: 저장하면 DB에 넣어줘야함!
-      navigate("/group-pray");
-    }
-  };
+const CreatePrayCard = ({ member }) => {
+  const { prayerText, setPrayerText, handleButtonClick } =
+    useCreatePrayCard(member);
 
   return (
     <div className="flex flex-col items-center justify-start min-h-screen py-8">
       <div className="mb-4 text-center">
-        <div className="text-4xl">Visioneer</div>
         <div className="mt-10">
           <h1>아직 기도제목이 없어요!</h1>
           <h1>기도제목을 작성해주세요</h1>

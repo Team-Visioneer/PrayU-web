@@ -11,7 +11,6 @@ import { Progress } from "@/components/ui/progress";
 
 export function CarouselSize() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  console.log(currentIndex);
 
   const [percent, setPercent] = useState(20);
   const handleNext = () => {

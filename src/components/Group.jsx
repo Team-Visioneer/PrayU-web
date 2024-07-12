@@ -4,10 +4,10 @@ import useMember from "../hooks/useMember";
 import { useParams } from "react-router-dom";
 import useGroup from "../hooks/useGroup";
 import { ClipLoader } from "react-spinners";
-import useAuth from "../hooks/useAuth";
+//import useAuth from "../hooks/useAuth";
 
 const Group = () => {
-  const { user } = useAuth();
+  //const { user } = useAuth();
 
   const { groupId } = useParams();
   const { groupName } = useGroup(groupId);

@@ -16,11 +16,41 @@ const PrayCard = ({
     isEditing,
     userInput,
     hasPrayed,
+    setHasPrayed,
     handleEditClick,
     handleSaveClick,
     handleChange,
     handlePrayClick,
-  } = usePrayCard(prayCard);
+  } = usePrayCard(prayCard /*groupId, currentMember*/);
+  console.log(">>prayCard", prayCard);
+  console.log(">>prayData", prayData);
+
+  //PrayData에 현재 유저가 오늘 이미 기도했는지 확인
+  function checkPrayDataForToday(prayData, userId) {
+    const today = new Date();
+    const startOfDay = new Date(today.setHours(0, 0, 0, 0));
+    const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+
+    return prayData.some((pray) => {
+      const prayDate = new Date(pray.created_at);
+      return (
+        pray.user_id === userId &&
+        prayDate >= startOfDay &&
+        prayDate <= endOfDay
+      );
+    });
+  }
+  // const hasPrayedToday = checkPrayDataForToday(prayData, currentMember.user_id);
+  setHasPrayed(checkPrayDataForToday(prayData, currentMember.user_id));
+
+  //   if (hasPrayedToday) {
+
+  // setHasPrayed(true)
+  //     console.log(" 이미 기도했다");
+  //   } else {
+
+  //     console.log("아직 안했다");
+  //   }
 
   if (!isOpen) return null;
 
@@ -79,7 +109,13 @@ const PrayCard = ({
           />
         </div>
         <button
-          onClick={() => handlePrayClick(prayCard)}
+          onClick={() =>
+            handlePrayClick(
+              currentMember,
+              prayCard,
+              hasPrayed /* hasPrayedToday*/
+            )
+          }
           className={`px-4 py-2 rounded w-full mt-4 ${
             hasPrayed ? "bg-gray-500 text-white" : "bg-green-500 text-white"
           }`}

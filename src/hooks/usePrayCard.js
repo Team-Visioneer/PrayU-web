@@ -1,10 +1,14 @@
 import { useState } from "react";
 import { supabase } from "../supaClient";
 
+<<<<<<< HEAD
 const usePrayCard = (member, lastestPrayCard) => {
   const [prayerText, setPrayerText] = useState(
     lastestPrayCard ? lastestPrayCard.content : ""
   );
+=======
+const usePrayCard = (lastestPrayCard /*groupId, currentMember*/) => {
+>>>>>>> bd86c67 (feat: restraint function)
   const [isEditing, setIsEditing] = useState(false);
   const [userInput, setUserInput] = useState(
     lastestPrayCard ? lastestPrayCard.content : "아직 기도제목이 없어요"
@@ -51,15 +55,24 @@ const usePrayCard = (member, lastestPrayCard) => {
     setUserInput(e.target.value);
   };
 
-  const handlePrayClick = async (prayCard) => {
+  const handlePrayClick = async (
+    currentMember,
+    prayCard,
+    hasPrayed
+    // hasPrayedToday
+  ) => {
     if (!prayCard) {
       console.error("prayCard is not defined");
       return null;
     }
-    await supabase.from("pray").insert({
-      pray_card_id: prayCard.id,
-    });
-    setHasPrayed(true);
+    if (hasPrayed) {
+      console.log("이미 기도했습니다");
+    } else {
+      await supabase.from("pray").insert({
+        pray_card_id: prayCard.id,
+      });
+      setHasPrayed(true);
+    }
   };
 
   return {
@@ -69,6 +82,7 @@ const usePrayCard = (member, lastestPrayCard) => {
     isEditing,
     userInput,
     hasPrayed,
+    setHasPrayed,
     handleEditClick,
     handleSaveClick,
     handleChange,

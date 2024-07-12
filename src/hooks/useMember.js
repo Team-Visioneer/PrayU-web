@@ -47,7 +47,6 @@ const useMember = (groupId) => {
           }
         } else {
           const _groupId = await fetchGroupId(session.user.id);
-          console.log(`_groupId:${_groupId}`);
           return navigate(`/group/${_groupId}`);
         }
       } else {

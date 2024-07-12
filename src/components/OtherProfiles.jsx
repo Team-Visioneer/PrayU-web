@@ -1,19 +1,6 @@
 import Profile from "../components/Profile";
-import PrayCard from "../components/PrayCard";
 
-const OtherProfiles = ({
-  otherMembers,
-  openModal,
-  handleLogout,
-  selectedMember,
-  isModalOpen,
-  closeModal,
-  groupId,
-  members,
-  currentMember,
-  prayCard,
-  prayData,
-}) => {
+const OtherProfiles = ({ otherMembers, openModal, handleLogout }) => {
   return (
     <div>
       <div className="mt-10">
@@ -31,18 +18,6 @@ const OtherProfiles = ({
           Logout
         </button>
       </div>
-      {selectedMember && (
-        <PrayCard
-          isOpen={isModalOpen}
-          onClose={closeModal}
-          groupId={groupId}
-          members={members}
-          selectedMember={selectedMember}
-          currentMember={currentMember}
-          prayCard={prayCard}
-          prayData={prayData}
-        />
-      )}
     </div>
   );
 };

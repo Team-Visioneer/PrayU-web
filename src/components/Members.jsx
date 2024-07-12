@@ -5,6 +5,7 @@ import OtherProfiles from "../components/OtherProfiles";
 import CreatePrayCard from "./CreatePrayCard";
 import PrayDrawer from "./PrayDrawer";
 import { useState } from "react";
+import PrayCard from "../components/PrayCard";
 
 const Members = ({ groupId }) => {
   const [prayDone, setPrayDone] = useState(false);
@@ -31,37 +32,43 @@ const Members = ({ groupId }) => {
     );
   }
 
-  if (currentMember.prayCards[0]?.content) {
-    if (prayDone) {
+  const renderModal = () =>
+    selectedMember && (
+      <PrayCard
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        groupId={groupId}
+        members={members}
+        selectedMember={selectedMember}
+        currentMember={currentMember}
+        prayCard={prayCard}
+        prayData={prayData}
+      />
+    );
+
+  const renderContent = () => {
+    if (currentMember.prayCards[0]?.content) {
       return (
-        <div>
-          <MyProfile member={currentMember} openFunction={openModal} />
-          <OtherProfiles
-            otherMembers={otherMembers}
-            openModal={openModal}
-            handleLogout={handleLogout}
-            selectedMember={selectedMember}
-            isModalOpen={isModalOpen}
-            closeModal={closeModal}
-            groupId={groupId}
-            members={members}
-            currentMember={currentMember}
-            prayCard={prayCard}
-            prayData={prayData}
-          />
-        </div>
+        <>
+          <MyProfile member={currentMember} openModal={openModal} />
+          {prayDone ? (
+            <OtherProfiles
+              otherMembers={otherMembers}
+              openModal={openModal}
+              handleLogout={handleLogout}
+            />
+          ) : (
+            <PrayDrawer otherMembers={otherMembers} setPrayDone={setPrayDone} />
+          )}
+          {renderModal()}
+        </>
       );
     } else {
-      return (
-        <div>
-          <MyProfile member={currentMember} openFunction={openModal} />
-          <PrayDrawer otherMembers={otherMembers} setPrayDone={setPrayDone} />
-        </div>
-      );
+      return <CreatePrayCard member={currentMember} />;
     }
-  } else {
-    return <CreatePrayCard member={currentMember} />;
-  }
+  };
+
+  return <div>{renderContent()}</div>;
 };
 
 export default Members;

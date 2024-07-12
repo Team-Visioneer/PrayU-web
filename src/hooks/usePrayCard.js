@@ -24,10 +24,15 @@ const usePrayCard = (lastestPrayCard) => {
       setIsEditing(false);
       return;
     }
-    await supabase
+
+    console.log(prayCard.id);
+    const { data, error } = await supabase
       .from("pray_card")
       .update({ content: userInput, updated_at: new Date() })
-      .eq("id", prayCard.id);
+      .eq("id", prayCard.id)
+      .select();
+    if (error) console.error(error);
+    console.log(data);
 
     setIsEditing(false);
   };

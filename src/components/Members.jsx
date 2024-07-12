@@ -2,10 +2,10 @@ import useMember from "../hooks/useMember";
 import { ClipLoader } from "react-spinners";
 import MyProfile from "../components/MyProfile";
 import OtherProfiles from "../components/OtherProfiles";
-import CreatePrayCard from "./CreatePrayCard";
 import PrayDrawer from "./PrayDrawer";
 import { useState } from "react";
 import PrayCard from "../components/PrayCard";
+import PrayCardCreateForm from "./PrayCardCreateForm";
 
 const Members = ({ groupId }) => {
   const [prayDone, setPrayDone] = useState(false);
@@ -64,7 +64,7 @@ const Members = ({ groupId }) => {
         </>
       );
     } else {
-      return <CreatePrayCard member={currentMember} />;
+      return <PrayCardCreateForm member={currentMember} />;
     }
   };
 

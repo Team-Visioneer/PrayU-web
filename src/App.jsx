@@ -1,5 +1,4 @@
 import CreateGroup from "./components/CreateGroup";
-import CreatePrayCard from "./components/CreatePrayCard";
 import Login from "./components/Login";
 import Main from "./components/Main";
 import NotFound from "./components/NotFound";
@@ -8,6 +7,7 @@ import { AuthProvider } from "./components/AuthProvider";
 import LoginPage from "./pages/LoginPage";
 import PrivateRoute from "./components/PrivateRoute";
 import GroupPage from "./pages/GroupPage";
+import PrayCardCreateForm from "./components/PrayCardCreateForm";
 
 const App = () => {
   return (
@@ -31,7 +31,7 @@ const App = () => {
               <Route path="/group-create" element={<CreateGroup />}></Route>
               <Route
                 path="/create-praycard"
-                element={<CreatePrayCard />}
+                element={<PrayCardCreateForm />}
               ></Route>
               <Route path="*" element={<NotFound />}></Route>
             </Routes>

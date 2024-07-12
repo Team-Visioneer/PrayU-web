@@ -28,8 +28,6 @@ const CreateGroup = () => {
       if (error) {
         console.error("Error create member:", error);
       } else {
-        // TODO: 여기서 group이 아니라 기도제목 작성페이지로 이동시켜야함.
-        // navigate("/CreatePrayCard.jsx");
         navigate(`/group/${groupId}`);
       }
     }

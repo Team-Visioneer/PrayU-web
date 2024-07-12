@@ -1,10 +1,10 @@
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
-import useCreatePrayCard from "../hooks/useCreatePrayCard";
+import usePrayCard from "../hooks/usePrayCard";
 
-const CreatePrayCard = ({ member }) => {
-  const { prayerText, setPrayerText, handleButtonClick } =
-    useCreatePrayCard(member);
+const PrayCardCreateForm = ({ member }) => {
+  const { prayerText, setPrayerText, handleCreatePrayCard } =
+    usePrayCard(member);
 
   return (
     <div className="flex flex-col items-center justify-start min-h-screen py-8">
@@ -29,7 +29,7 @@ const CreatePrayCard = ({ member }) => {
       <div className="mt-4 flex flex-col items-center justify-center text-center">
         <Button
           className="bg-black hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
-          onClick={handleButtonClick}
+          onClick={handleCreatePrayCard}
         >
           저장하고 기도하러 가기
         </Button>
@@ -38,4 +38,4 @@ const CreatePrayCard = ({ member }) => {
   );
 };
 
-export default CreatePrayCard;
+export default PrayCardCreateForm;

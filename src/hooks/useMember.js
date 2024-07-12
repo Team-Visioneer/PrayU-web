@@ -23,7 +23,7 @@ const useMember = (groupId) => {
         error,
       } = await supabase.auth.getSession();
       if (error) {
-        console.log("Error fetching session:", error);
+        console.error("Error fetching session:", error);
         setLoading(false);
         return;
       }
@@ -38,7 +38,7 @@ const useMember = (groupId) => {
 
           if (!members || members.length === 0) {
             if (retry) {
-              await fetchSession(false); // 재시도
+              await fetchSession(false);
             } else {
               console.error("Failed to fetch members after retry.");
             }
@@ -50,7 +50,6 @@ const useMember = (groupId) => {
           return navigate(`/group/${_groupId}`);
         }
       } else {
-        console.log("No session found");
         return navigate(`/login/${groupId}`);
       }
     } catch (err) {

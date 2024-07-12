@@ -1,19 +1,30 @@
 import { useState } from "react";
 import { supabase } from "../supaClient";
 
-<<<<<<< HEAD
 const usePrayCard = (member, lastestPrayCard) => {
   const [prayerText, setPrayerText] = useState(
     lastestPrayCard ? lastestPrayCard.content : ""
   );
-=======
-const usePrayCard = (lastestPrayCard /*groupId, currentMember*/) => {
->>>>>>> bd86c67 (feat: restraint function)
   const [isEditing, setIsEditing] = useState(false);
   const [userInput, setUserInput] = useState(
     lastestPrayCard ? lastestPrayCard.content : "아직 기도제목이 없어요"
   );
   const [hasPrayed, setHasPrayed] = useState(false);
+
+  const checkPrayDataForToday = (prayData, userId) => {
+    const today = new Date();
+    const startOfDay = new Date(today.setHours(0, 0, 0, 0));
+    const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+
+    return prayData.some((pray) => {
+      const prayDate = new Date(pray.created_at);
+      return (
+        pray.user_id === userId &&
+        prayDate >= startOfDay &&
+        prayDate <= endOfDay
+      );
+    });
+  };
 
   const handleCreatePrayCard = async () => {
     if (prayerText.trim() === "") {
@@ -55,14 +66,9 @@ const usePrayCard = (lastestPrayCard /*groupId, currentMember*/) => {
     setUserInput(e.target.value);
   };
 
-  const handlePrayClick = async (
-    currentMember,
-    prayCard,
-    hasPrayed
-    // hasPrayedToday
-  ) => {
+  const handlePrayClick = async (prayCard, hasPrayed) => {
     if (!prayCard) {
-      console.error("prayCard is not defined");
+      console.error("기도카드가 없습니다.");
       return null;
     }
     if (hasPrayed) {
@@ -87,6 +93,7 @@ const usePrayCard = (lastestPrayCard /*groupId, currentMember*/) => {
     handleSaveClick,
     handleChange,
     handlePrayClick,
+    checkPrayDataForToday,
   };
 };
 

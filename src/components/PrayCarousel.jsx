@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
@@ -8,19 +8,34 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
 
-export function CarouselSize() {
+export function PrayCarousel({ otherMembers, setPrayDone }) {
+  const othersWithPrayCards = otherMembers.filter(
+    (member) => member.prayCards && member.prayCards[0]
+  );
+  const prayCardCount = othersWithPrayCards.length;
+
   const [currentIndex, setCurrentIndex] = useState(0);
-  console.log(currentIndex);
+  const [percent, setPercent] = useState(
+    (currentIndex + 1) * (100 / prayCardCount)
+  );
 
-  const [percent, setPercent] = useState(20);
   const handleNext = () => {
     setCurrentIndex((prevIndex) => {
-      const newIndex = (prevIndex + 1) % 5; // Assuming there are 5 items
-      setPercent((newIndex + 1) * 20);
+      const newIndex = (prevIndex + 1) % prayCardCount;
+      setPercent((currentIndex + 1) * (100 / prayCardCount));
       return newIndex;
     });
   };
+
+  const handleComplete = () => {
+    setPrayDone(true);
+  };
+
+  useEffect(() => {
+    setPercent((currentIndex + 1) * (100 / prayCardCount));
+  }, [currentIndex, prayCardCount]);
 
   return (
     <Carousel
@@ -34,13 +49,13 @@ export function CarouselSize() {
       </div>
 
       <CarouselContent>
-        {Array.from({ length: 5 }).map((_, index) => (
+        {othersWithPrayCards.map((member, index) => (
           <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
             <div className="p-1 flex items-center justify-center">
               <Card className="w-4/5 h-96 mb-10 bg-white">
                 <CardContent className="flex aspect-square items-center justify-center p-6">
                   <span className="text-3xl font-semibold">
-                    기도제목:{index + 1}
+                    {member.prayCards[0].content}
                   </span>
                 </CardContent>
               </Card>
@@ -49,7 +64,18 @@ export function CarouselSize() {
         ))}
       </CarouselContent>
       <CarouselPrevious />
-      <CarouselNext onClick={handleNext} />
+      {currentIndex < prayCardCount - 1 ? (
+        <CarouselNext onClick={handleNext} />
+      ) : (
+        <div className="flex justify-center">
+          <Button
+            onClick={handleComplete}
+            className="bg-blue-500 text-white px-4 py-2 rounded"
+          >
+            기도 완료
+          </Button>
+        </div>
+      )}
     </Carousel>
   );
 }

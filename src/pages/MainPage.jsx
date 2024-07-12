@@ -4,7 +4,7 @@ import { supabase } from "../supaClient";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import useAuth from "../hooks/useAuth";
 
-const LoginPage = () => {
+const MainPage = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   if (user) {
@@ -29,4 +29,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default MainPage;

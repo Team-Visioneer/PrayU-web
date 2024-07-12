@@ -8,16 +8,23 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Progress } from "@/components/ui/progress";
-import { Button } from "@/components/ui/button"; // assuming you have a Button component
+import { Button } from "@/components/ui/button";
 
 export function PrayCarousel({ otherMembers, setPrayDone }) {
-  const numMembers = otherMembers.length;
+  const othersWithPrayCards = otherMembers.filter(
+    (member) => member.prayCards && member.prayCards[0]
+  );
+  const prayCardCount = othersWithPrayCards.length;
+
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [percent, setPercent] = useState(20);
+  const [percent, setPercent] = useState(
+    (currentIndex + 1) * (100 / prayCardCount)
+  );
 
   const handleNext = () => {
     setCurrentIndex((prevIndex) => {
-      const newIndex = (prevIndex + 1) % numMembers;
+      const newIndex = (prevIndex + 1) % prayCardCount;
+      setPercent((currentIndex + 1) * (100 / prayCardCount));
       return newIndex;
     });
   };
@@ -27,11 +34,8 @@ export function PrayCarousel({ otherMembers, setPrayDone }) {
   };
 
   useEffect(() => {
-    setPercent((currentIndex + 1) * (100 / numMembers));
-    if (currentIndex === numMembers) {
-      setPrayDone(true);
-    }
-  }, [currentIndex, setPrayDone, numMembers]);
+    setPercent((currentIndex + 1) * (100 / prayCardCount));
+  }, [currentIndex, prayCardCount]);
 
   return (
     <Carousel
@@ -45,15 +49,13 @@ export function PrayCarousel({ otherMembers, setPrayDone }) {
       </div>
 
       <CarouselContent>
-        {otherMembers.map((member, index) => (
+        {othersWithPrayCards.map((member, index) => (
           <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
             <div className="p-1 flex items-center justify-center">
               <Card className="w-4/5 h-96 mb-10 bg-white">
                 <CardContent className="flex aspect-square items-center justify-center p-6">
                   <span className="text-3xl font-semibold">
-                    {member.prayCards && member.prayCards[0]
-                      ? member.prayCards[0].content
-                      : "아직 기도제목이 없어요"}
+                    {member.prayCards[0].content}
                   </span>
                 </CardContent>
               </Card>
@@ -62,7 +64,7 @@ export function PrayCarousel({ otherMembers, setPrayDone }) {
         ))}
       </CarouselContent>
       <CarouselPrevious />
-      {currentIndex < numMembers - 1 ? (
+      {currentIndex < prayCardCount - 1 ? (
         <CarouselNext onClick={handleNext} />
       ) : (
         <div className="flex justify-center">

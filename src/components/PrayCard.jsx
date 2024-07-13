@@ -23,7 +23,7 @@ const PrayCard = ({
     handleChange,
     handlePrayClick,
     checkPrayDataForToday,
-  } = usePrayCard(currentMember, prayCard);
+  } = usePrayCard(prayCard);
 
   useEffect(() => {
     setHasPrayed(checkPrayDataForToday(prayData, currentMember.user_id));

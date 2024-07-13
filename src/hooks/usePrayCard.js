@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { supabase } from "../supaClient";
 
-const usePrayCard = (member, lastestPrayCard) => {
+const usePrayCard = (lastestPrayCard) => {
   const [prayerText, setPrayerText] = useState(
     lastestPrayCard ? lastestPrayCard.content : ""
   );
@@ -31,7 +31,7 @@ const usePrayCard = (member, lastestPrayCard) => {
       alert("기도제목을 작성해주셔야 그룹원들을 위해 기도할 수 있어요");
     } else {
       await supabase.from("pray_card").insert({
-        group_id: member.group_id,
+        group_id: lastestPrayCard.group_id,
         content: prayerText,
       });
       window.location.reload();
@@ -72,13 +72,13 @@ const usePrayCard = (member, lastestPrayCard) => {
       return null;
     }
     if (hasPrayed) {
-      console.log("이미 기도했습니다");
-    } else {
-      await supabase.from("pray").insert({
-        pray_card_id: prayCard.id,
-      });
-      setHasPrayed(true);
+      console.log("당일 기도 진행완료.");
+      return null;
     }
+    await supabase.from("pray").insert({
+      pray_card_id: prayCard.id,
+    });
+    setHasPrayed(true);
   };
 
   return {

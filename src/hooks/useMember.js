@@ -50,7 +50,7 @@ const useMember = (groupId) => {
           return navigate(`/group/${_groupId}`);
         }
       } else {
-        return navigate(`/login/${groupId}`);
+        return navigate("/");
       }
     } catch (err) {
       console.error("Unexpected error:", err);

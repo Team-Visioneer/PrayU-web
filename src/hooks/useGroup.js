@@ -23,10 +23,6 @@ const useGroup = () => {
   }, []);
 
   const getTargetGroup = useCallback(async (groupId) => {
-    if (!groupId) {
-      console.error("Error get group ID 404: groupId is null");
-      return null;
-    }
     const { data, error } = await supabase
       .from("group")
       .select("*")
@@ -39,7 +35,6 @@ const useGroup = () => {
       return null;
     }
 
-    console.log(data);
     setTargetGroup(data);
     return data;
   }, []);

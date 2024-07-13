@@ -22,11 +22,23 @@ const GroupPage = () => {
     document.body.appendChild(script);
     return () => document.body.removeChild(script);
   }, []);
+
   useEffect(() => {
-    console.log("fetchGroupListbyUserId", user.id);
     fetchGroupListbyUserId(user.id);
     if (targetGroupId) getTargetGroup(targetGroupId);
   }, [fetchGroupListbyUserId, user.id, getTargetGroup, targetGroupId]);
+
+  useEffect(() => {
+    if (groupList && !targetGroupId) {
+      if (groupList.length === 0) {
+        navigate("/group/new");
+        return;
+      } else {
+        navigate(`/group/${groupList[0].group.id}`);
+        return;
+      }
+    }
+  });
 
   if (!groupList || (targetGroupId && !targetGroup)) {
     return (
@@ -35,17 +47,6 @@ const GroupPage = () => {
       </div>
     );
   }
-
-  console.log("targetGroupId", targetGroupId);
-  if (!targetGroupId)
-    if (groupList.length === 0) {
-      navigate("/group/new");
-      return;
-    } else {
-      console.log("redirect to first group");
-      navigate(`/group/${groupList[0].group.id}`);
-      return;
-    }
 
   return (
     <div>

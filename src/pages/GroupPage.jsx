@@ -29,7 +29,7 @@ const GroupPage = () => {
   }, [fetchGroupListbyUserId, user.id, getTargetGroup, targetGroupId]);
 
   useEffect(() => {
-    if (groupList && !targetGroupId) {
+    if (!targetGroupId && groupList) {
       if (groupList.length === 0) {
         navigate("/group/new");
         return;
@@ -38,7 +38,7 @@ const GroupPage = () => {
         return;
       }
     }
-  });
+  }, [groupList, navigate, targetGroupId]);
 
   if (!groupList || (targetGroupId && !targetGroup)) {
     return (
@@ -47,10 +47,9 @@ const GroupPage = () => {
       </div>
     );
   }
-
   return (
     <div>
-      <h3 className="text-center mt-10 text-3xl">Group: {targetGroup.name}</h3>
+      <h3 className="text-center mt-10 text-3xl">Group: {targetGroup?.name}</h3>
       <Button
         variant="kakao"
         size="sm"
@@ -60,7 +59,9 @@ const GroupPage = () => {
       >
         그룹 링크 공유하기
       </Button>
-      <Members groupId={targetGroup.id} />
+      <Members groupId={targetGroup?.id} />
+      <h3 className="text-center mt-10 text-3xl">Group: {targetGroup?.name}</h3>
+      <Members groupId={targetGroup?.id} />
     </div>
   );
 };

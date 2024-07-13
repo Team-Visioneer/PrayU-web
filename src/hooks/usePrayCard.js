@@ -67,7 +67,7 @@ const usePrayCard = (currentMember, lastestPrayCard, prayData) => {
     setUserInput(e.target.value);
   };
 
-  const handlePrayClick = async (prayCard, hasPrayed) => {
+  const handlePrayClick = async (prayCard) => {
     if (!prayCard) {
       console.error("기도카드가 없습니다.");
       return null;

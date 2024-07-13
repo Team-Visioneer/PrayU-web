@@ -1,7 +1,6 @@
 import PrayerList from "./PrayerList";
 import { AiOutlineEdit, AiOutlineSave, AiOutlineClose } from "react-icons/ai";
 import usePrayCard from "../hooks/usePrayCard";
-import { useEffect } from "react";
 
 const PrayCard = ({
   isOpen,
@@ -17,17 +16,13 @@ const PrayCard = ({
     isEditing,
     userInput,
     hasPrayed,
-    setHasPrayed,
+
     handleEditClick,
     handleSaveClick,
     handleChange,
     handlePrayClick,
-    checkPrayDataForToday,
-  } = usePrayCard(prayCard);
+  } = usePrayCard(currentMember, prayCard, prayData);
 
-  useEffect(() => {
-    setHasPrayed(checkPrayDataForToday(prayData, currentMember.user_id));
-  }, []);
   if (!isOpen) return null;
 
   return (

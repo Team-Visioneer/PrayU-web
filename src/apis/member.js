@@ -66,7 +66,7 @@ export async function fetchMemberByGroupId(
 
     const { data, error } = await supabase
       .from("member")
-      .insert([{ user_id: currentUserId, groupId }])
+      .insert([{ user_id: currentUserId, group_id: groupId }])
       .select();
 
     if (error) {

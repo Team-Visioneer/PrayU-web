@@ -1,7 +1,21 @@
 import { useState } from "react";
 import { supabase } from "../supaClient";
 
-const usePrayCard = (member, lastestPrayCard) => {
+const usePrayCard = (currentMember, lastestPrayCard, prayData) => {
+  const checkPrayDataForToday = (prayData, userId) => {
+    const today = new Date();
+    const startOfDay = new Date(today.setHours(0, 0, 0, 0));
+    const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+
+    return prayData.some((pray) => {
+      const prayDate = new Date(pray.created_at);
+      return (
+        pray.user_id === userId &&
+        prayDate >= startOfDay &&
+        prayDate <= endOfDay
+      );
+    });
+  };
   const [prayerText, setPrayerText] = useState(
     lastestPrayCard ? lastestPrayCard.content : ""
   );
@@ -9,14 +23,16 @@ const usePrayCard = (member, lastestPrayCard) => {
   const [userInput, setUserInput] = useState(
     lastestPrayCard ? lastestPrayCard.content : "아직 기도제목이 없어요"
   );
-  const [hasPrayed, setHasPrayed] = useState(false);
+  const [hasPrayed, setHasPrayed] = useState(
+    checkPrayDataForToday(prayData, currentMember.user_id)
+  );
 
   const handleCreatePrayCard = async () => {
     if (prayerText.trim() === "") {
       alert("기도제목을 작성해주셔야 그룹원들을 위해 기도할 수 있어요");
     } else {
       await supabase.from("pray_card").insert({
-        group_id: member.group_id,
+        group_id: lastestPrayCard.group_id,
         content: prayerText,
       });
       window.location.reload();
@@ -53,7 +69,11 @@ const usePrayCard = (member, lastestPrayCard) => {
 
   const handlePrayClick = async (prayCard) => {
     if (!prayCard) {
-      console.error("prayCard is not defined");
+      console.error("기도카드가 없습니다.");
+      return null;
+    }
+    if (hasPrayed) {
+      console.log("당일 기도 진행완료.");
       return null;
     }
     await supabase.from("pray").insert({
@@ -69,6 +89,7 @@ const usePrayCard = (member, lastestPrayCard) => {
     isEditing,
     userInput,
     hasPrayed,
+
     handleEditClick,
     handleSaveClick,
     handleChange,

@@ -16,11 +16,12 @@ const PrayCard = ({
     isEditing,
     userInput,
     hasPrayed,
+
     handleEditClick,
     handleSaveClick,
     handleChange,
     handlePrayClick,
-  } = usePrayCard(prayCard);
+  } = usePrayCard(currentMember, prayCard, prayData);
 
   if (!isOpen) return null;
 

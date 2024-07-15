@@ -1,4 +1,6 @@
-import React from "react";
+import { useState, useEffect } from "react";
+import { supabase } from "../supaClient";
+
 import {
   Drawer,
   DrawerContent,
@@ -18,8 +20,63 @@ import {
 } from "@/components/ui/card";
 import Profile from "./Profile";
 
-const MemberPrayDrawer = ({ member }) => {
-  console.log(member);
+const MemberPrayDrawer = ({ currentMember, member }) => {
+  const [hasPrayed, setHasPrayed] = useState(false);
+
+  const checkPrayDataForToday = (prayData, userId) => {
+    const today = new Date();
+    const startOfDay = new Date(today.setHours(0, 0, 0, 0));
+    const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+
+    return prayData.some((pray) => {
+      const prayDate = new Date(pray.created_at);
+      return (
+        pray.user_id === userId &&
+        prayDate >= startOfDay &&
+        prayDate <= endOfDay
+      );
+    });
+  };
+
+  const handlePrayClick = async (prayCard) => {
+    if (!prayCard) {
+      console.error("기도카드가 없습니다.");
+      return null;
+    }
+    if (hasPrayed) {
+      console.log("당일 기도 진행완료.");
+      return null;
+    }
+    await supabase.from("pray").insert({
+      pray_card_id: prayCard.id,
+    });
+    setHasPrayed(true);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (member.prayCards[0]) {
+        const { data, error } = await supabase
+          .from("pray")
+          .select(`*, profiles (id, full_name, avatar_url)`)
+          .eq("pray_card_id", member.prayCards[0].id)
+          .is("deleted_at", null);
+
+        if (error) {
+          console.error("Error fetching pray:", error);
+          return [];
+        }
+        const hasPrayedToday = checkPrayDataForToday(
+          data,
+          currentMember.profiles.id
+        );
+        setHasPrayed(hasPrayedToday);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div className="w-full flex justify-center">
       <Drawer>
@@ -55,7 +112,15 @@ const MemberPrayDrawer = ({ member }) => {
               <Card className="flex flex-col items-center justify-center w-[360px] h-[150px] mt-5 bg-white text-black border-2 border-blue-100 rounded-2xl">
                 <CardTitle className="text-xl">기도하기</CardTitle>
                 <div className="flex justify-center space-x-4 mt-2">
-                  <button className="bg-purple-100 text-black py-2 px-4 flex flex-col items-center rounded-2xl">
+                  <button
+                    onClick={() => handlePrayClick(member.prayCards[0])}
+                    className={`py-2 px-4 flex flex-col items-center rounded-2xl ${
+                      hasPrayed
+                        ? "bg-gray-300 cursor-not-allowed"
+                        : "bg-purple-100 text-black"
+                    }`}
+                    disabled={hasPrayed}
+                  >
                     <span className="text-2xl">🙏</span>
                     <span>기도해요</span>
                   </button>

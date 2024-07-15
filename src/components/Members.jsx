@@ -72,8 +72,8 @@ const Members = ({ currentUserId, groupId }) => {
           </div>
           {prayDone ? (
             <OtherProfiles
+              currentMember={currentMember}
               otherMembers={otherMembers}
-              openModal={openModal}
               handleLogout={handleLogout}
             />
           ) : (

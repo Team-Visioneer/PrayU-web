@@ -1,16 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useCallback } from "react";
 import { supabase } from "../supaClient";
-import { useNavigate } from "react-router-dom";
 
-const useGroup = (paramsGroupId) => {
-  const navigate = useNavigate();
+const useGroup = () => {
+  const [groupList, setGroupList] = useState(null);
+  const [targetGroup, setTargetGroup] = useState(null);
 
-  const [groupName, setGroupName] = useState("");
-
-  const fetchGroupId = async (userId) => {
+  const fetchGroupListbyUserId = useCallback(async (userId) => {
     const { data, error } = await supabase
       .from("member")
-      .select("group_id")
+      .select(`group (*)`)
       .eq("user_id", userId)
       .is("deleted_at", null);
 
@@ -18,48 +17,29 @@ const useGroup = (paramsGroupId) => {
       console.error("Error fetching group ID:", error);
       return null;
     }
-    if (data[0]) return data[0].group_id;
-    return data[0];
-  };
 
-  useEffect(() => {
-    if (paramsGroupId) {
-      fetchGroupName(paramsGroupId);
-    } else {
-      supabase.auth.getSession().then(async ({ data: { session } }) => {
-        if (session) {
-          const userId = session.user.id;
-          const fetchedGroupId = await fetchGroupId(userId);
-          if (fetchedGroupId) {
-            navigate(`/group/${fetchedGroupId}`);
-          } else {
-            navigate(`/group-create`);
-          }
-        } else {
-          navigate(`/login`);
-        }
-      });
-    }
-  }, [paramsGroupId, navigate]);
+    setGroupList(data);
+    return data;
+  }, []);
 
-  const fetchGroupName = async (paramsGroupId) => {
+  const getTargetGroup = useCallback(async (groupId) => {
     const { data, error } = await supabase
       .from("group")
-      .select("name")
-      .eq("id", paramsGroupId)
-      .is("deleted_at", null);
+      .select("*")
+      .eq("id", groupId)
+      .is("deleted_at", null)
+      .single();
 
     if (error) {
-      console.error("Error fetching Group Name:", error);
-      return;
+      console.error("Error get group ID:", error);
+      return null;
     }
 
-    if (data && data.length > 0) {
-      setGroupName(data[0].name);
-    }
-  };
+    setTargetGroup(data);
+    return data;
+  }, []);
 
-  return { groupName };
+  return { fetchGroupListbyUserId, getTargetGroup, groupList, targetGroup };
 };
 
 export default useGroup;

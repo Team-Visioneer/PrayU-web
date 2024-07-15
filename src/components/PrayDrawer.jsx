@@ -13,14 +13,6 @@ import { useEffect } from "react";
 import { shareToKakaotalk } from "../utils";
 
 const PrayDrawer = ({ otherMembers, setPrayDone }) => {
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://developers.kakao.com/sdk/js/kakao.js";
-    script.async = true;
-    document.body.appendChild(script);
-    return () => document.body.removeChild(script);
-  }, []);
-
   return (
     <div className="flex justify-center items-center mt-20">
       <Drawer>
@@ -28,16 +20,6 @@ const PrayDrawer = ({ otherMembers, setPrayDone }) => {
           <h1 className="font-bold text-xl mb-5">오늘의 기도를 시작해보세요</h1>
           <h1>다른 그룹원들의 기도제목을</h1>
           <h1 className="mb-5">확인하고 반응해주세요</h1>
-
-          <Button
-            variant="kakao"
-            size="sm"
-            onClick={() => {
-              shareToKakaotalk();
-            }}
-          >
-            그룹 링크 공유하기
-          </Button>
 
           <DrawerTrigger>
             <div

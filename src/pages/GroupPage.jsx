@@ -59,7 +59,9 @@ const GroupPage = () => {
       >
         그룹 링크 공유하기
       </Button>
-      <Members currentUserId={user.id} groupId={targetGroup?.id} />
+      {targetGroup && (
+        <Members currentUserId={user.id} groupId={targetGroup.id} />
+      )}
     </div>
   );
 };

@@ -42,7 +42,6 @@ const Members = ({ currentUserId, groupId }) => {
     );
   }
 
-  console.log("members", restructedMembers);
   const currentMember = restructedMembers.find(
     (member) => member.user_id === currentUserId
   );

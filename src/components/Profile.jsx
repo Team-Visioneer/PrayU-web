@@ -8,11 +8,11 @@ const Profile = ({ member, onClick }) => {
     >
       <div className="flex items-center">
         <img
-          src={member.avatar_url}
-          alt={`${member.name}'s avatar`}
+          src={member.profiles.avatar_url}
+          alt={`${member.profiles.full_name}'s avatar`}
           className="w-5 h-5 rounded-full mr-4"
         />
-        <h3 className="text-white">{member.name}</h3>
+        <h3 className="text-white">{member.profiles.full_name}</h3>
       </div>
 
       <div className="text-white">

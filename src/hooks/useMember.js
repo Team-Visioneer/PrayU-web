@@ -1,72 +1,98 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { supabase } from "../supaClient";
 import { useNavigate } from "react-router-dom";
-import { fetchMemberByGroupId } from "../apis/member";
-import { fetchPrayData } from "../apis/pray";
-import { fetchGroupId } from "../apis/group";
+import { useCallback } from "react";
 
-const useMember = (groupId) => {
-  const [members, setMembers] = useState([]);
-  const [prayCard, setPrayCard] = useState(null);
-  const [prayData, setPrayData] = useState([]);
+const useMember = () => {
+  const [loading, setLoading] = useState(true);
+  const [members, setMembers] = useState(null);
+  const [restructedMembers, setRestructedMembers] = useState(null);
+  const [prayData, setPrayData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const lastInsertTimeRef = useRef(0);
 
   const navigate = useNavigate();
 
-  const fetchSession = async (retry = true) => {
-    try {
-      const {
-        data: { session },
-        error,
-      } = await supabase.auth.getSession();
-      if (error) {
-        console.error("Error fetching session:", error);
-        setLoading(false);
-        return;
-      }
+  const fetchMemberByGroupId = useCallback(async (groupId) => {
+    const { data, error } = await supabase
+      .from("member")
+      .select(`*, profiles (id, full_name, avatar_url)`)
+      .eq("group_id", groupId);
 
-      if (session) {
-        if (groupId) {
-          let members = await fetchMemberByGroupId(
-            groupId,
-            session.user.id,
-            lastInsertTimeRef
-          );
-
-          if (!members || members.length === 0) {
-            if (retry) {
-              await fetchSession(false);
-            } else {
-              console.error("Failed to fetch members after retry.");
-            }
-          } else {
-            setMembers(members);
-          }
-        } else {
-          const _groupId = await fetchGroupId(session.user.id);
-          return navigate(`/group/${_groupId}`);
-        }
-      } else {
-        return navigate("/");
-      }
-    } catch (err) {
-      console.error("Unexpected error:", err);
-    } finally {
-      setLoading(false);
+    if (error) {
+      console.error("Failed to fetch members:", error);
+      return [];
     }
-  };
 
-  useEffect(() => {
-    fetchSession();
-  }, [groupId]);
+    setMembers(data);
+    return data;
+  }, []);
+
+  // TODO: 유저별 최근 기도카드 하나씩만 가져오는 함수로 변경
+  const fetchGroupPrayCards = useCallback(
+    async (currentUserId, groupId, userIds, members) => {
+      if (!userIds.includes(currentUserId)) {
+        const { error } = await supabase.from("member").insert([
+          {
+            group_id: groupId,
+            user_id: currentUserId,
+          },
+        ]);
+
+        if (error) {
+          console.error("Failed to create member:", error);
+          return null;
+        }
+      }
+
+      const { data, error } = await supabase
+        .from("pray_card")
+        .select("*")
+        .eq("group_id", groupId)
+        .in("user_id", userIds);
+
+      if (error) {
+        console.error("Error fetching pray cards:", error);
+        return [];
+      }
+
+      const userIdPrayCardsHash = data.reduce((hash, prayCard) => {
+        const userId = prayCard.user_id;
+        if (!hash[userId]) {
+          hash[userId] = [];
+        }
+        hash[userId].push(prayCard);
+        return hash;
+      }, {});
+
+      const membersWithPrayCards = members.map((member) => ({
+        ...member,
+        prayCards: userIdPrayCardsHash[member.user_id] || [],
+      }));
+      setRestructedMembers(membersWithPrayCards);
+
+      setLoading(false);
+      return data;
+    },
+    []
+  );
 
   const openModal = async (member, prayCard) => {
-    const prayData = await fetchPrayData(prayCard);
-    setPrayCard(prayCard);
-    setPrayData(prayData);
+    if (!prayCard) {
+      return [];
+    }
+    const { data, error } = await supabase
+      .from("pray")
+      .select(`*, profiles (id, full_name, avatar_url)`)
+      .eq("pray_card_id", prayCard.id)
+      .is("deleted_at", null);
+
+    if (error) {
+      console.error("Error fetching pray:", error);
+      return [];
+    }
+
+    setPrayData(data);
     setSelectedMember(member);
     setIsModalOpen(true);
   };
@@ -82,15 +108,17 @@ const useMember = (groupId) => {
   };
 
   return {
+    loading,
     members,
-    prayCard,
+    restructedMembers,
     prayData,
     isModalOpen,
     openModal,
     closeModal,
     handleLogout,
     selectedMember,
-    loading,
+    fetchMemberByGroupId,
+    fetchGroupPrayCards,
   };
 };
 

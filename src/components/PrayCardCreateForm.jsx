@@ -3,8 +3,11 @@ import { Button } from "./ui/button";
 import usePrayCard from "../hooks/usePrayCard";
 
 const PrayCardCreateForm = ({ member }) => {
-  const { prayerText, setPrayerText, handleCreatePrayCard } =
-    usePrayCard(member);
+  const { prayerText, setPrayerText, handleCreatePrayCard } = usePrayCard(
+    member,
+    member.prayCards[0],
+    []
+  );
 
   return (
     <div className="flex flex-col items-center justify-start min-h-screen py-8">
@@ -29,7 +32,7 @@ const PrayCardCreateForm = ({ member }) => {
       <div className="mt-4 flex flex-col items-center justify-center text-center">
         <Button
           className="bg-black hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
-          onClick={handleCreatePrayCard}
+          onClick={() => handleCreatePrayCard(member.group_id)}
         >
           저장하고 기도하러 가기
         </Button>

@@ -3,28 +3,38 @@ import { ClipLoader } from "react-spinners";
 import MyProfile from "../components/MyProfile";
 import OtherProfiles from "../components/OtherProfiles";
 import PrayDrawer from "./PrayDrawer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PrayCard from "../components/PrayCard";
 import PrayCardCreateForm from "./PrayCardCreateForm";
 
-const Members = ({ groupId }) => {
+const Members = ({ currentUserId, groupId }) => {
   const [prayDone, setPrayDone] = useState(false);
   const {
+    loading,
     members,
-    prayCard,
+    restructedMembers,
     prayData,
     isModalOpen,
     openModal,
     closeModal,
     handleLogout,
     selectedMember,
-    loading,
-  } = useMember(groupId);
+    fetchMemberByGroupId,
+    fetchGroupPrayCards,
+  } = useMember();
 
-  const currentMember = members.find((member) => member.isCurrentUser);
-  const otherMembers = members.filter((member) => !member.isCurrentUser);
+  useEffect(() => {
+    fetchMemberByGroupId(groupId);
+  }, [fetchMemberByGroupId, groupId]);
 
-  if (loading || !currentMember) {
+  useEffect(() => {
+    if (members) {
+      const userIds = members.map((member) => member.user_id);
+      fetchGroupPrayCards(currentUserId, groupId, userIds, members);
+    }
+  }, [fetchGroupPrayCards, currentUserId, groupId, members]);
+
+  if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
         <ClipLoader size={50} color={"#123abc"} loading={true} />
@@ -32,16 +42,23 @@ const Members = ({ groupId }) => {
     );
   }
 
+  const currentMember = restructedMembers.find(
+    (member) => member.user_id === currentUserId
+  );
+  const otherMembers = restructedMembers.filter(
+    (member) => member.user_id !== currentUserId
+  );
+
   const renderModal = () =>
     selectedMember && (
       <PrayCard
         isOpen={isModalOpen}
         onClose={closeModal}
         groupId={groupId}
-        members={members}
-        selectedMember={selectedMember}
+        members={restructedMembers}
         currentMember={currentMember}
-        prayCard={prayCard}
+        selectedMember={selectedMember}
+        prayCard={selectedMember.prayCards[0]}
         prayData={prayData}
       />
     );

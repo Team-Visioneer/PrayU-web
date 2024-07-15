@@ -16,7 +16,6 @@ const PrayCard = ({
     isEditing,
     userInput,
     hasPrayed,
-
     handleEditClick,
     handleSaveClick,
     handleChange,
@@ -35,19 +34,19 @@ const PrayCard = ({
           <AiOutlineClose size={24} />
         </button>
         <div className="flex items-center mb-4">
-          {selectedMember.avatar_url && (
+          {selectedMember.profiles.avatar_url && (
             <img
-              src={selectedMember.avatar_url}
-              alt={`${selectedMember.full_name}'s avatar`}
+              src={selectedMember.profiles.avatar_url}
+              alt={`${selectedMember.profiles.full_name}'s avatar`}
               className="w-10 h-10 rounded-full mr-4"
             />
           )}
           <h2 className="text-xl font-bold">
-            {selectedMember.full_name}의 기도제목
+            {selectedMember.profiles.full_name}의 기도제목
           </h2>
         </div>
         <div className="flex justify-between items-center mb-4">
-          {isEditing && selectedMember.isCurrentUser ? (
+          {isEditing && selectedMember.user_id == currentMember.user_id ? (
             <textarea
               value={userInput}
               onChange={handleChange}
@@ -56,7 +55,7 @@ const PrayCard = ({
           ) : (
             <p>{userInput}</p>
           )}
-          {selectedMember.isCurrentUser &&
+          {selectedMember.user_id == currentMember.user_id &&
             (isEditing ? (
               <AiOutlineSave
                 onClick={() => handleSaveClick(groupId, prayCard)}

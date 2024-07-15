@@ -38,7 +38,7 @@ const MemberPrayDrawer = ({ currentMember, member }) => {
     });
   };
 
-  const handlePrayClick = async (prayCard) => {
+  const handlePrayClick = async (prayCard, prayType) => {
     if (!prayCard) {
       console.error("기도카드가 없습니다.");
       return null;
@@ -49,6 +49,7 @@ const MemberPrayDrawer = ({ currentMember, member }) => {
     }
     await supabase.from("pray").insert({
       pray_card_id: prayCard.id,
+      pray_type: prayType,
     });
     setHasPrayed(true);
   };
@@ -113,7 +114,7 @@ const MemberPrayDrawer = ({ currentMember, member }) => {
                 <CardTitle className="text-xl">기도하기</CardTitle>
                 <div className="flex justify-center space-x-4 mt-2">
                   <button
-                    onClick={() => handlePrayClick(member.prayCards[0])}
+                    onClick={() => handlePrayClick(member.prayCards[0], "pray")}
                     className={`py-2 px-4 flex flex-col items-center rounded-2xl ${
                       hasPrayed
                         ? "bg-gray-300 cursor-not-allowed"
@@ -124,11 +125,27 @@ const MemberPrayDrawer = ({ currentMember, member }) => {
                     <span className="text-2xl">🙏</span>
                     <span>기도해요</span>
                   </button>
-                  <button className="bg-blue-100 text-black py-2 px-4 rounded-2xl flex flex-col items-center">
+                  <button
+                    onClick={() => handlePrayClick(member.prayCards[0], "good")}
+                    className={`py-2 px-4 flex flex-col items-center rounded-2xl ${
+                      hasPrayed
+                        ? "bg-gray-300 cursor-not-allowed"
+                        : "bg-purple-100 text-black"
+                    }`}
+                    disabled={hasPrayed}
+                  >
                     <span className="text-2xl">👍</span>
                     <span>응원해요</span>
                   </button>
-                  <button className="bg-red-100 text-black py-2 px-4 rounded-2xl flex flex-col items-center">
+                  <button
+                    onClick={() => handlePrayClick(member.prayCards[0], "like")}
+                    className={`py-2 px-4 flex flex-col items-center rounded-2xl ${
+                      hasPrayed
+                        ? "bg-gray-300 cursor-not-allowed"
+                        : "bg-purple-100 text-black"
+                    }`}
+                    disabled={hasPrayed}
+                  >
                     <span className="text-2xl">❤️</span>
                     <span>좋아요</span>
                   </button>

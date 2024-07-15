@@ -29,7 +29,7 @@ const PrayCardCreateForm = ({ member }) => {
       <div className="mt-4 flex flex-col items-center justify-center text-center">
         <Button
           className="bg-black hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
-          onClick={() => handleCreatePrayCard(member.group_id)}
+          onClick={() => handleCreatePrayCard(member?.group_id)}
         >
           저장하고 기도하러 가기
         </Button>

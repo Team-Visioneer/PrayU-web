@@ -8,7 +8,6 @@ const PrayCard = ({
   isOpen,
   onClose,
   groupId,
-  members,
   selectedMember,
   currentMember,
   prayCard,
@@ -27,12 +26,11 @@ const PrayCard = ({
   } = usePrayCard(prayCard);
 
   useEffect(() => {
-    fetchPrayData(prayCard.id);
-  }, [fetchPrayData, prayCard.id]);
+    fetchPrayData(prayCard);
+  }, [fetchPrayData, prayCard]);
 
   useEffect(() => {
     if (prayData) {
-      console.log("asdfasdf");
       checkPrayDataForToday(currentMember.user_id, prayData);
     }
   }, [checkPrayDataForToday, currentMember.user_id, prayData]);
@@ -94,7 +92,6 @@ const PrayCard = ({
         </div>
         <div className="mt-5 mb-5">
           <PrayerList
-            members={members}
             selectedMember={selectedMember}
             currentMember={currentMember}
             prayData={prayData}

@@ -6,7 +6,8 @@ import { useCallback } from "react";
 const useMember = () => {
   const [loading, setLoading] = useState(true);
   const [members, setMembers] = useState(null);
-  const [restructedMembers, setRestructedMembers] = useState(null);
+  const [currentMember, setCurrentMember] = useState(null);
+  const [otherMembers, setOtherMembers] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
 
@@ -29,7 +30,9 @@ const useMember = () => {
 
   // TODO: 유저별 최근 기도카드 하나씩만 가져오는 함수로 변경
   const fetchGroupPrayCards = useCallback(
-    async (currentUserId, groupId, userIds, members) => {
+    async (currentUserId, groupId, members) => {
+      const userIds = members.map((member) => member.user_id);
+
       if (!userIds.includes(currentUserId)) {
         const { error } = await supabase.from("member").insert([
           {
@@ -68,7 +71,15 @@ const useMember = () => {
         ...member,
         prayCards: userIdPrayCardsHash[member.user_id] || [],
       }));
-      setRestructedMembers(membersWithPrayCards);
+
+      const currentMember = membersWithPrayCards.find(
+        (member) => member.user_id === currentUserId
+      );
+      const otherMembers = membersWithPrayCards.filter(
+        (member) => member.user_id !== currentUserId
+      );
+      setCurrentMember(currentMember);
+      setOtherMembers(otherMembers);
 
       setLoading(false);
       return data;
@@ -94,7 +105,8 @@ const useMember = () => {
   return {
     loading,
     members,
-    restructedMembers,
+    currentMember,
+    otherMembers,
     isModalOpen,
     openModal,
     closeModal,

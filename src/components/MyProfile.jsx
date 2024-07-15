@@ -5,10 +5,12 @@ const MyProfile = ({ member, openModal }) => {
     <div className="mt-10">
       <h1 className="">My</h1>
       {member ? (
-        <Profile
-          member={member}
-          onClick={() => openModal(member, member.prayCards[0])}
-        />
+        <div className="flex justify-center items-center w-full max-w-md mx-auto">
+          <Profile
+            member={member}
+            onClick={() => openModal(member, member.prayCards[0])}
+          />
+        </div>
       ) : (
         <div className="text-red-500">No current user found</div>
       )}

@@ -11,3 +11,27 @@ export const formatDateString = (dateString) => {
   const day = String(date.getUTCDate()).padStart(2, "0");
   return `${year}.${month}.${day}`;
 };
+
+export const shareToKakaotalk = () => {
+  const key = import.meta.env.VITE_KAKAO_JS_KEY;
+  if (window.Kakao) {
+    const kakao = window.Kakao;
+
+    if (!kakao.isInitialized()) {
+      kakao.init(key);
+    }
+
+    kakao.Link.sendDefault({
+      objectType: "feed",
+      content: {
+        title: "PrayU",
+        description: "PrayU와 함께 기도해요!",
+        imageUrl: "이미지 주소",
+        link: {
+          mobileWebUrl: import.meta.env.VITE_BASE_URL,
+          webUrl: import.meta.env.VITE_BASE_URL,
+        },
+      },
+    });
+  }
+};

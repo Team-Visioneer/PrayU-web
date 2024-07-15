@@ -8,9 +8,6 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { PrayCarousel } from "./PrayCarousel";
-import { Button } from "./ui/button";
-import { useEffect } from "react";
-import { shareToKakaotalk } from "../utils";
 
 const PrayDrawer = ({ otherMembers, setPrayDone }) => {
   return (

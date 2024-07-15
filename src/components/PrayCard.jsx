@@ -1,5 +1,7 @@
-import PrayerList from "./PrayerList";
+import { useEffect } from "react";
+import { ClipLoader } from "react-spinners";
 import { AiOutlineEdit, AiOutlineSave, AiOutlineClose } from "react-icons/ai";
+import PrayerList from "./PrayerList";
 import usePrayCard from "../hooks/usePrayCard";
 
 const PrayCard = ({
@@ -10,7 +12,6 @@ const PrayCard = ({
   selectedMember,
   currentMember,
   prayCard,
-  prayData,
 }) => {
   const {
     isEditing,
@@ -20,9 +21,30 @@ const PrayCard = ({
     handleSaveClick,
     handleChange,
     handlePrayClick,
-  } = usePrayCard(currentMember, prayCard, prayData);
+    prayData,
+    fetchPrayData,
+    checkPrayDataForToday,
+  } = usePrayCard(prayCard);
+
+  useEffect(() => {
+    fetchPrayData(prayCard.id);
+  }, [fetchPrayData, prayCard.id]);
+
+  useEffect(() => {
+    if (prayData) {
+      console.log("asdfasdf");
+      checkPrayDataForToday(currentMember.user_id, prayData);
+    }
+  }, [checkPrayDataForToday, currentMember.user_id, prayData]);
 
   if (!isOpen) return null;
+  if (!prayData) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <ClipLoader size={50} color={"#123abc"} loading={true} />
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">

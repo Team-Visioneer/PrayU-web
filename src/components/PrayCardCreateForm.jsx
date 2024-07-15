@@ -3,11 +3,8 @@ import { Button } from "./ui/button";
 import usePrayCard from "../hooks/usePrayCard";
 
 const PrayCardCreateForm = ({ member }) => {
-  const { prayerText, setPrayerText, handleCreatePrayCard } = usePrayCard(
-    member,
-    member.prayCards[0],
-    []
-  );
+  const { prayerText, setPrayerText, handleCreatePrayCard } =
+    usePrayCard(member);
 
   return (
     <div className="flex flex-col items-center justify-start min-h-screen py-8">

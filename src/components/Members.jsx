@@ -13,7 +13,6 @@ const Members = ({ currentUserId, groupId }) => {
     loading,
     members,
     restructedMembers,
-    prayData,
     isModalOpen,
     openModal,
     closeModal,
@@ -59,7 +58,6 @@ const Members = ({ currentUserId, groupId }) => {
         currentMember={currentMember}
         selectedMember={selectedMember}
         prayCard={selectedMember.prayCards[0]}
-        prayData={prayData}
       />
     );
 

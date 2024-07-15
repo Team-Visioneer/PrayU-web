@@ -7,7 +7,6 @@ const useMember = () => {
   const [loading, setLoading] = useState(true);
   const [members, setMembers] = useState(null);
   const [restructedMembers, setRestructedMembers] = useState(null);
-  const [prayData, setPrayData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
 
@@ -77,22 +76,7 @@ const useMember = () => {
     []
   );
 
-  const openModal = async (member, prayCard) => {
-    if (!prayCard) {
-      return [];
-    }
-    const { data, error } = await supabase
-      .from("pray")
-      .select(`*, profiles (id, full_name, avatar_url)`)
-      .eq("pray_card_id", prayCard.id)
-      .is("deleted_at", null);
-
-    if (error) {
-      console.error("Error fetching pray:", error);
-      return [];
-    }
-
-    setPrayData(data);
+  const openModal = async (member) => {
     setSelectedMember(member);
     setIsModalOpen(true);
   };
@@ -111,7 +95,6 @@ const useMember = () => {
     loading,
     members,
     restructedMembers,
-    prayData,
     isModalOpen,
     openModal,
     closeModal,

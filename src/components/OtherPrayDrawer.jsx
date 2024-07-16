@@ -98,11 +98,11 @@ const OtherPrayDrawer = ({ currentMember, member }) => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchMyPrayData = async () => {
       if (member.prayCards[0]) {
         const { data, error } = await supabase
           .from("pray")
-          .select("*")
+          .select(`*, profiles (id, full_name, avatar_url)`)
           .eq("pray_card_id", member.prayCards[0].id)
           .eq("user_id", currentMember.profiles.id)
           .is("deleted_at", null);
@@ -118,12 +118,15 @@ const OtherPrayDrawer = ({ currentMember, member }) => {
         );
         setHasPrayed(hasPrayedToday);
 
-        const generatedDates = generateDates(member.created_at, data);
+        const generatedDates = generateDates(
+          member.prayCards[0].created_at,
+          data
+        );
         setDates(generatedDates);
       }
     };
 
-    fetchData();
+    fetchMyPrayData();
   }, [member.prayCards, currentMember.profiles.id, member.created_at]);
 
   return (

@@ -23,24 +23,33 @@ import PrayCalender from "./ui/PrayCalender";
 
 const OtherPrayDrawer = ({ currentMember, member }) => {
   const [hasPrayed, setHasPrayed] = useState(false);
+  const [dates, setDates] = useState([]);
+  const prayTypeToEmoji = {
+    pray: "🙏",
+    good: "👍",
+    like: "❤️",
+  };
 
-  const generateDates = (createdAt) => {
+  const generateDates = (createdAt, prayEntries) => {
     const today = new Date(createdAt);
     const dateList = [];
-    const emojis = ["🙏", "🙏", "🙏", "❤️", "", "", ""];
 
     for (let i = 0; i < 7; i++) {
       const newDate = new Date(today);
       newDate.setDate(today.getDate() + i);
       const formattedDate = newDate.toISOString().split("T")[0];
-      dateList.push({ date: formattedDate, emoji: emojis[i] });
+
+      const prayEntry = prayEntries.find((entry) => {
+        const prayDate = new Date(entry.created_at).toISOString().split("T")[0];
+        return prayDate === formattedDate;
+      });
+
+      const emoji = prayEntry ? prayTypeToEmoji[prayEntry.pray_type] : "";
+      dateList.push({ date: formattedDate, emoji });
     }
 
     return dateList;
   };
-
-  const dates = generateDates(member.created_at);
-  console.log(dates);
 
   const checkPrayDataForToday = (prayData, userId) => {
     const today = new Date();
@@ -66,11 +75,26 @@ const OtherPrayDrawer = ({ currentMember, member }) => {
       console.error("당일 기도 진행완료.");
       return null;
     }
-    await supabase.from("pray").insert({
+    const { data, error } = await supabase.from("pray").insert({
       pray_card_id: prayCard.id,
       pray_type: prayType,
     });
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
     setHasPrayed(true);
+
+    const today = new Date().toISOString().split("T")[0];
+    setDates((prevDates) =>
+      prevDates.map((date) =>
+        date.date === today
+          ? { ...date, emoji: prayTypeToEmoji[prayType] }
+          : date
+      )
+    );
   };
 
   useEffect(() => {
@@ -78,24 +102,34 @@ const OtherPrayDrawer = ({ currentMember, member }) => {
       if (member.prayCards[0]) {
         const { data, error } = await supabase
           .from("pray")
-          .select(`*, profiles (id, full_name, avatar_url)`)
+          .select("*")
           .eq("pray_card_id", member.prayCards[0].id)
+          .eq("user_id", currentMember.profiles.id)
           .is("deleted_at", null);
 
         if (error) {
           console.error("Error fetching pray:", error);
           return [];
         }
+
         const hasPrayedToday = checkPrayDataForToday(
           data,
           currentMember.profiles.id
         );
         setHasPrayed(hasPrayedToday);
+
+        const generatedDates = generateDates(member.created_at, data);
+        setDates(generatedDates);
       }
     };
 
     fetchData();
-  }, []);
+  }, [
+    member.prayCards,
+    currentMember.profiles.id,
+    member.created_at,
+    generateDates,
+  ]);
 
   return (
     <div className="w-full flex justify-center">

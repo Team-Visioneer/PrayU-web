@@ -4,7 +4,7 @@ const Profile = ({ member, onClick }) => {
   return (
     <div
       onClick={onClick}
-      className="flex flex-col gap-2 cursor-pointer bg-gray-800 p-4 rounded mb-2"
+      className="flex flex-col gap-2 cursor-pointer bg-gray-800 p-4 rounded mb-2 "
     >
       <div className="flex items-center">
         <img
@@ -15,10 +15,10 @@ const Profile = ({ member, onClick }) => {
         <h3 className="text-white">{member.profiles.full_name}</h3>
       </div>
 
-      <div className="text-white">
+      <div className="text-left text-sm text-gray-300">
         {member.prayCards[0]?.content || "아직 기도제목이 없어요"}
       </div>
-      <div className="text-gray-500">
+      <div className="text-gray-500 text-left text-sm">
         {formatDateString(member.prayCards[0]?.updated_at) || "-"}
       </div>
     </div>

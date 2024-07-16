@@ -1,5 +1,4 @@
-import Profile from "../components/Profile";
-import MemberPrayDrawer from "./MemberPrayDrawer";
+import OtherPrayDrawer from "./OtherPrayDrawer";
 
 const OtherProfiles = ({ currentMember, otherMembers }) => {
   return (
@@ -8,7 +7,7 @@ const OtherProfiles = ({ currentMember, otherMembers }) => {
         <h1 className="">Members: {otherMembers.length}</h1>
         <ul className="">
           {otherMembers.map((member) => (
-            <MemberPrayDrawer
+            <OtherPrayDrawer
               key={member.id}
               currentMember={currentMember}
               member={member}

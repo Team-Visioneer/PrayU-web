@@ -8,7 +8,7 @@ import PrayCard from "../components/PrayCard";
 import PrayCardCreateForm from "./PrayCardCreateForm";
 
 const Members = ({ currentUserId, groupId }) => {
-  const [prayDone, setPrayDone] = useState(true);
+  const [prayDone, setPrayDone] = useState(false);
   const {
     loading,
     members,

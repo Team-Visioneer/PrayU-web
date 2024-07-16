@@ -39,10 +39,8 @@ const PrayDrawer = ({ otherMembers, setPrayDone }) => {
         </div>
         <DrawerContent>
           <DrawerHeader>
-            <DrawerTitle className="text-white">
-              그룹원들을 위해 기도하기
-            </DrawerTitle>
-            <DrawerDescription className="text-white">
+            <DrawerTitle className="">그룹원들을 위해 기도하기</DrawerTitle>
+            <DrawerDescription className="">
               기도하면 다음으로 넘어가요
             </DrawerDescription>
           </DrawerHeader>

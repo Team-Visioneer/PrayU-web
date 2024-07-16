@@ -137,10 +137,9 @@ const OtherPrayDrawer = ({ currentMember, member }) => {
         </DrawerTrigger>
         <DrawerContent>
           <DrawerHeader>
-            <DrawerTitle className="text-white"></DrawerTitle>
             <DrawerDescription className="text-white flex flex-col justify-center">
               <Card className="flex-col bg-white w-[360px] h-[450px] flex justify-center items-center rounded-2xl border-2 border-blue-100">
-                <Card className="bg-cardInsideBlue text-black w-[300px] h-[300px] rounded-2xl mb-10">
+                <Card className="bg-cardInsideBlue text-black w-[300px] h-[300px] rounded-2xl mb-6">
                   <CardHeader>
                     <CardTitle>
                       <div>
@@ -157,7 +156,6 @@ const OtherPrayDrawer = ({ currentMember, member }) => {
                   <CardContent className="text-2xl">
                     {member.prayCards[0]?.content}
                   </CardContent>
-                  <CardFooter></CardFooter>
                 </Card>
                 <PrayCalender dates={dates} />
               </Card>
@@ -205,8 +203,6 @@ const OtherPrayDrawer = ({ currentMember, member }) => {
               </Card>
             </DrawerDescription>
           </DrawerHeader>
-
-          <DrawerFooter />
         </DrawerContent>
       </Drawer>
     </div>

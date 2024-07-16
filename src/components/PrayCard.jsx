@@ -29,7 +29,7 @@ const PrayCard = ({
   if (!isOpen) return null;
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-      <div className="bg-cardOutsideBlue p-8 rounded shadow-md w-full h-full max-w-md relative">
+      <div className="bg-cardOutsideBlue p-8 rounded shadow-md w-full h-screen max-w-md relative">
         <button
           onClick={onClose}
           className="absolute top-5 right-5 text-gray-600 hover:text-gray-900"
@@ -46,15 +46,15 @@ const PrayCard = ({
           )}
           <h2 className="text-xl font-bold">나의 기도제목</h2>
         </div>
-        <div className="flex flex-col items-center w-full h-[500px] bg-white rounded-2xl mt-10 border-2 border-blue-100">
+        <div className="flex flex-col items-center w-full h-[400px] bg-white rounded-2xl mt-10 border-2 border-blue-100">
           {isEditing && selectedMember.user_id == currentMember.user_id ? (
             <textarea
               value={userInput}
               onChange={handleChange}
-              className="w-5/6 h-[400px] p-2 border rounded-2xl mt-10 mb-2"
+              className="w-5/6 h-[300px] p-2 border rounded-2xl mt-10 mb-2"
             />
           ) : (
-            <div className="border w-5/6 h-[400px] rounded-2xl flex justify-center items-center bg-white mb-2 mt-10">
+            <div className="border w-5/6 h-[300px] rounded-2xl flex justify-center items-center bg-white mb-2 mt-10">
               {userInput}
             </div>
           )}

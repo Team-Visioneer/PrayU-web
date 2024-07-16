@@ -10,7 +10,7 @@ import PrayCardCreateForm from "./components/PrayCardCreateForm";
 const App = () => {
   return (
     <div className="App h-screen">
-      <div className="mx-auto max-w-[600px] ">
+      <div className="mx-auto max-w-[480px] ">
         <BrowserRouter>
           <AuthProvider>
             <Routes>

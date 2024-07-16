@@ -45,18 +45,26 @@ export function PrayCarousel({ otherMembers, setPrayDone }) {
       className="w-full max-w-sm"
     >
       <div className="flex justify-center">
-        <Progress value={percent} className="w-3/5 bg-red-200 mb-4" />
+        <Progress value={percent} className="w-3/5 bg-white mb-4" />
       </div>
 
       <CarouselContent>
         {othersWithPrayCards.map((member, index) => (
           <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
             <div className="p-1 flex items-center justify-center">
-              <Card className="w-4/5 h-96 mb-10 bg-white">
+              <Card className="w-4/5 h-96 mb-10 bg-white rounded-2xl">
                 <CardContent className="flex aspect-square items-center justify-center p-6">
-                  <span className="text-3xl font-semibold">
-                    {member.prayCards[0].content}
-                  </span>
+                  <div className="flex flex-col items-center justify-center">
+                    <img
+                      src={member.profiles.avatar_url}
+                      alt="avatar"
+                      className="w-10 h-10 rounded-full mb-20"
+                    />
+
+                    <span className="text-3xl font-semibold">
+                      {member.prayCards[0].content}
+                    </span>
+                  </div>
                 </CardContent>
               </Card>
             </div>

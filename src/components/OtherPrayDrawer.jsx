@@ -24,18 +24,23 @@ import PrayCalender from "./ui/PrayCalender";
 const OtherPrayDrawer = ({ currentMember, member }) => {
   const [hasPrayed, setHasPrayed] = useState(false);
 
-  const day = new Date(member.created_at).getDate();
-  console.log(member.created_at);
+  const generateDates = (createdAt) => {
+    const today = new Date(createdAt);
+    const dateList = [];
+    const emojis = ["🙏", "🙏", "🙏", "❤️", "", "", ""];
 
-  const dates = [
-    { date: "2024-07-13", emoji: "🙏" },
-    { date: "2024-07-14", emoji: "🙏" },
-    { date: "2024-07-15", emoji: "🙏" },
-    { date: "2024-07-16", emoji: "❤️" },
-    { date: "2024-07-17", emoji: "" },
-    { date: "2024-07-18", emoji: "" },
-    { date: "2024-07-19", emoji: "" },
-  ];
+    for (let i = 0; i < 7; i++) {
+      const newDate = new Date(today);
+      newDate.setDate(today.getDate() + i);
+      const formattedDate = newDate.toISOString().split("T")[0];
+      dateList.push({ date: formattedDate, emoji: emojis[i] });
+    }
+
+    return dateList;
+  };
+
+  const dates = generateDates(member.created_at);
+  console.log(dates);
 
   const checkPrayDataForToday = (prayData, userId) => {
     const today = new Date();

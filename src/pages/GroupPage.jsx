@@ -54,7 +54,7 @@ const GroupPage = () => {
         variant="kakao"
         size="sm"
         onClick={() => {
-          shareToKakaotalk();
+          shareToKakaotalk(targetGroup?.id);
         }}
       >
         그룹 링크 공유하기

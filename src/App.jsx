@@ -5,11 +5,10 @@ import MainPage from "./pages/MainPage";
 import GroupPage from "./pages/GroupPage";
 import NotFound from "./components/NotFound";
 import CreateGroup from "./components/CreateGroup";
-import PrayCardCreateForm from "./components/PrayCardCreateForm";
 
 const App = () => {
   return (
-    <div className="App h-screen">
+    <div className="w-screen h-screen">
       <div className="mx-auto max-w-[480px] ">
         <BrowserRouter>
           <AuthProvider>
@@ -31,10 +30,13 @@ const App = () => {
                   </PrivateRoute>
                 }
               ></Route>
-              <Route path="/group/new" element={<CreateGroup />}></Route>
               <Route
-                path="/create-praycard"
-                element={<PrayCardCreateForm />}
+                path="/group/new"
+                element={
+                  <PrivateRoute>
+                    <CreateGroup />
+                  </PrivateRoute>
+                }
               ></Route>
               <Route path="*" element={<NotFound />}></Route>
             </Routes>

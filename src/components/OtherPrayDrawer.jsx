@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/card";
 import Profile from "./Profile";
 
-const MemberPrayDrawer = ({ currentMember, member }) => {
+const OtherPrayDrawer = ({ currentMember, member }) => {
   const [hasPrayed, setHasPrayed] = useState(false);
 
   const checkPrayDataForToday = (prayData, userId) => {
@@ -115,7 +115,7 @@ const MemberPrayDrawer = ({ currentMember, member }) => {
                 <div className="flex justify-center space-x-4 mt-2">
                   <button
                     onClick={() => handlePrayClick(member.prayCards[0], "pray")}
-                    className={`py-2 px-4 flex flex-col items-center rounded-2xl ${
+                    className={`w-[90px] py-2 px-4 flex flex-col items-center rounded-2xl ${
                       hasPrayed
                         ? "bg-gray-300 cursor-not-allowed"
                         : "bg-purple-100 text-black"
@@ -127,7 +127,7 @@ const MemberPrayDrawer = ({ currentMember, member }) => {
                   </button>
                   <button
                     onClick={() => handlePrayClick(member.prayCards[0], "good")}
-                    className={`py-2 px-4 flex flex-col items-center rounded-2xl ${
+                    className={`w-[90px] py-2 px-4 flex flex-col items-center rounded-2xl ${
                       hasPrayed
                         ? "bg-gray-300 cursor-not-allowed"
                         : "bg-purple-100 text-black"
@@ -139,7 +139,7 @@ const MemberPrayDrawer = ({ currentMember, member }) => {
                   </button>
                   <button
                     onClick={() => handlePrayClick(member.prayCards[0], "like")}
-                    className={`py-2 px-4 flex flex-col items-center rounded-2xl ${
+                    className={`w-[90px] py-2 px-4 flex flex-col items-center rounded-2xl ${
                       hasPrayed
                         ? "bg-gray-300 cursor-not-allowed"
                         : "bg-purple-100 text-black"
@@ -161,4 +161,4 @@ const MemberPrayDrawer = ({ currentMember, member }) => {
   );
 };
 
-export default MemberPrayDrawer;
+export default OtherPrayDrawer;

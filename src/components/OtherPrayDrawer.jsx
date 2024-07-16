@@ -19,9 +19,23 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Profile from "./Profile";
+import PrayCalender from "./ui/PrayCalender";
 
 const OtherPrayDrawer = ({ currentMember, member }) => {
   const [hasPrayed, setHasPrayed] = useState(false);
+
+  const day = new Date(member.created_at).getDate();
+  console.log(member.created_at);
+
+  const dates = [
+    { date: "2024-07-13", emoji: "🙏" },
+    { date: "2024-07-14", emoji: "🙏" },
+    { date: "2024-07-15", emoji: "🙏" },
+    { date: "2024-07-16", emoji: "❤️" },
+    { date: "2024-07-17", emoji: "" },
+    { date: "2024-07-18", emoji: "" },
+    { date: "2024-07-19", emoji: "" },
+  ];
 
   const checkPrayDataForToday = (prayData, userId) => {
     const today = new Date();
@@ -44,7 +58,7 @@ const OtherPrayDrawer = ({ currentMember, member }) => {
       return null;
     }
     if (hasPrayed) {
-      console.log("당일 기도 진행완료.");
+      console.error("당일 기도 진행완료.");
       return null;
     }
     await supabase.from("pray").insert({
@@ -88,7 +102,7 @@ const OtherPrayDrawer = ({ currentMember, member }) => {
           <DrawerHeader>
             <DrawerTitle className="text-white"></DrawerTitle>
             <DrawerDescription className="text-white flex flex-col justify-center">
-              <Card className="bg-white w-[360px] h-[450px] flex justify-center items-center rounded-2xl border-2 border-blue-100">
+              <Card className="flex-col bg-white w-[360px] h-[450px] flex justify-center items-center rounded-2xl border-2 border-blue-100">
                 <Card className="bg-cardInsideBlue text-black w-[300px] h-[300px] rounded-2xl mb-10">
                   <CardHeader>
                     <CardTitle>
@@ -108,6 +122,7 @@ const OtherPrayDrawer = ({ currentMember, member }) => {
                   </CardContent>
                   <CardFooter></CardFooter>
                 </Card>
+                <PrayCalender dates={dates} />
               </Card>
 
               <Card className="flex flex-col items-center justify-center w-[360px] h-[150px] mt-5 bg-white text-black border-2 border-blue-100 rounded-2xl">

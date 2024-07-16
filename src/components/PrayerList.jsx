@@ -4,7 +4,7 @@ const PrayerList = ({ selectedMember, currentMember, prayData }) => {
   return (
     <div className="flex bg-gray-500 text-white p-5 mt-10  gap-4">
       {selectedMember.user_id === currentMember.user_id
-        ? prayData.map((pray) => (
+        ? prayData?.map((pray) => (
             <div
               key={pray.id}
               className="flex flex-col justify-center items-center gap-1"
@@ -20,7 +20,7 @@ const PrayerList = ({ selectedMember, currentMember, prayData }) => {
             </div>
           ))
         : prayData
-            .filter((pray) => pray.user_id === currentMember.user_id)
+            ?.filter((pray) => pray.user_id === currentMember.user_id)
             .map((pray) => (
               <div key={pray.id} className="text-white text-xs">
                 <div>{getDayOfWeek(pray.created_at)}</div>

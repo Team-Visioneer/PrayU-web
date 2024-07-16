@@ -1,6 +1,8 @@
 import { AiOutlineEdit, AiOutlineSave, AiOutlineClose } from "react-icons/ai";
 import usePrayCard from "../hooks/usePrayCard";
 import PrayerListDrawer from "./PrayerListDrawer";
+import PrayerList from "./PrayerList";
+import { useEffect } from "react";
 
 const PrayCard = ({
   isOpen,
@@ -16,10 +18,15 @@ const PrayCard = ({
     handleEditClick,
     handleSaveClick,
     handleChange,
+    prayData,
+    fetchPrayData,
   } = usePrayCard(currentMember.prayCards[0]);
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    fetchPrayData(prayCard);
+  }, [fetchPrayData, prayCard]);
 
+  if (!isOpen) return null;
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-cardOutsideBlue p-8 rounded shadow-md w-full h-full max-w-md relative">
@@ -69,15 +76,13 @@ const PrayCard = ({
           </div>
         </div>
         <PrayerListDrawer currentMember={currentMember} />
-
         {/*<div className="mt-5 mb-5">
           <PrayerList
-            members={members}
             selectedMember={selectedMember}
             currentMember={currentMember}
             prayData={prayData}
           />
-        </div>*/}
+        </div> */}
 
         {/* 
         <button

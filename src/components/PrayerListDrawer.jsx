@@ -23,7 +23,7 @@ const PrayerListDrawer = ({ currentMember }) => {
         );
 
         if (!prayCard) {
-          console.log("No prayCard found for the given groupId");
+          console.error("No prayCard found for the given groupId");
           return { pray: 0, good: 0, like: 0 };
         }
 

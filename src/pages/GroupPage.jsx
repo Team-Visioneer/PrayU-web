@@ -51,6 +51,7 @@ const GroupPage = () => {
     <div>
       <h3 className="text-center mt-10 text-3xl">Group: {targetGroup?.name}</h3>
       <Button
+        className=""
         variant="kakao"
         size="sm"
         onClick={() => {

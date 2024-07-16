@@ -30,7 +30,7 @@ const OtherPrayDrawer = ({ currentMember, member }) => {
     like: "❤️",
   };
 
-  const generateDates = (createdAt, prayEntries) => {
+  const generateDates = (createdAt, prayDatas) => {
     const today = new Date(createdAt);
     const dateList = [];
 
@@ -39,12 +39,12 @@ const OtherPrayDrawer = ({ currentMember, member }) => {
       newDate.setDate(today.getDate() + i);
       const formattedDate = newDate.toISOString().split("T")[0];
 
-      const prayEntry = prayEntries.find((entry) => {
+      const prayData = prayDatas.find((entry) => {
         const prayDate = new Date(entry.created_at).toISOString().split("T")[0];
         return prayDate === formattedDate;
       });
 
-      const emoji = prayEntry ? prayTypeToEmoji[prayEntry.pray_type] : "";
+      const emoji = prayData ? prayTypeToEmoji[prayData.pray_type] : "";
       dateList.push({ date: formattedDate, emoji });
     }
 

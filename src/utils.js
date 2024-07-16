@@ -12,7 +12,7 @@ export const formatDateString = (dateString) => {
   return `${year}.${month}.${day}`;
 };
 
-export const shareToKakaotalk = () => {
+export const shareToKakaotalk = (groupId) => {
   const key = import.meta.env.VITE_KAKAO_JS_KEY;
   if (window.Kakao) {
     const kakao = window.Kakao;
@@ -28,8 +28,8 @@ export const shareToKakaotalk = () => {
         description: "PrayU와 함께 기도해요!",
         imageUrl: "이미지 주소",
         link: {
-          mobileWebUrl: import.meta.env.VITE_BASE_URL,
-          webUrl: import.meta.env.VITE_BASE_URL,
+          mobileWebUrl: `${import.meta.env.VITE_BASE_URL}/group/${groupId}`,
+          webUrl: `${import.meta.env.VITE_BASE_URL}/group/${groupId}`,
         },
       },
     });

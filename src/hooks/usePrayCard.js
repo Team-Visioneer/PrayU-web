@@ -1,21 +1,8 @@
 import { useState } from "react";
 import { supabase } from "../supaClient";
+import { useCallback } from "react";
 
-const usePrayCard = (currentMember, prayCard, prayData) => {
-  const checkPrayDataForToday = (prayData, userId) => {
-    const today = new Date();
-    const startOfDay = new Date(today.setHours(0, 0, 0, 0));
-    const endOfDay = new Date(today.setHours(23, 59, 59, 999));
-
-    return prayData.some((pray) => {
-      const prayDate = new Date(pray.created_at);
-      return (
-        pray.user_id === userId &&
-        prayDate >= startOfDay &&
-        prayDate <= endOfDay
-      );
-    });
-  };
+const usePrayCard = (prayCard) => {
   const [prayerText, setPrayerText] = useState(
     prayCard ? prayCard.content : ""
   );
@@ -23,9 +10,43 @@ const usePrayCard = (currentMember, prayCard, prayData) => {
   const [userInput, setUserInput] = useState(
     prayCard ? prayCard.content : "아직 기도제목이 없어요"
   );
-  const [hasPrayed, setHasPrayed] = useState(
-    checkPrayDataForToday(prayData, currentMember.user_id)
-  );
+  const [prayData, setPrayData] = useState(null);
+  const [hasPrayed, setHasPrayed] = useState(false);
+
+  const fetchPrayData = useCallback(async (prayCard) => {
+    if (!prayCard) {
+      return [];
+    }
+    const { data, error } = await supabase
+      .from("pray")
+      .select(`*, profiles (id, full_name, avatar_url)`)
+      .eq("pray_card_id", prayCard.id)
+      .is("deleted_at", null);
+
+    if (error) {
+      console.error("Failed to fetch pray data:", error);
+      return [];
+    }
+
+    setPrayData(data);
+    return data;
+  }, []);
+
+  const checkPrayDataForToday = useCallback((userId, prayData) => {
+    const today = new Date();
+    const startOfDay = new Date(today.setHours(0, 0, 0, 0));
+    const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+
+    const hasPrayedToday = prayData.some((pray) => {
+      const prayDate = new Date(pray.created_at);
+      return (
+        pray.user_id === userId &&
+        prayDate >= startOfDay &&
+        prayDate <= endOfDay
+      );
+    });
+    setHasPrayed(hasPrayedToday);
+  }, []);
 
   const handleCreatePrayCard = async (groupId) => {
     if (prayerText.trim() === "") {
@@ -67,18 +88,34 @@ const usePrayCard = (currentMember, prayCard, prayData) => {
     setUserInput(e.target.value);
   };
 
-  const handlePrayClick = async (prayCard) => {
+  const handlePrayClick = async (prayCard, prayType) => {
     if (!prayCard) {
       console.error("기도카드가 없습니다.");
       return null;
     }
     if (hasPrayed) {
-      console.log("당일 기도 진행완료.");
       return null;
     }
-    await supabase.from("pray").insert({
+    const { data, error } = await supabase.from("pray").insert({
       pray_card_id: prayCard.id,
+      pray_type: prayType,
     });
+    if (error) {
+      console.error("Failed to insert pray data:", error);
+      return null;
+    }
+
+    const { data: fetchData, error: fetchError } = await supabase
+      .from("pray")
+      .select(`*, profiles (id, full_name, avatar_url)`)
+      .eq("pray_card_id", prayCard.id)
+      .is("deleted_at", null);
+
+    if (fetchError) {
+      console.error("Failed to fetch pray data:", error);
+      return [];
+    }
+    setPrayData(fetchData);
     setHasPrayed(true);
   };
 
@@ -93,6 +130,9 @@ const usePrayCard = (currentMember, prayCard, prayData) => {
     handleSaveClick,
     handleChange,
     handlePrayClick,
+    prayData,
+    fetchPrayData,
+    checkPrayDataForToday,
   };
 };
 

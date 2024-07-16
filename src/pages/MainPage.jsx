@@ -22,7 +22,7 @@ const MainPage = () => {
         redirectTo={redirectUrl}
         supabaseClient={supabase}
         appearance={{ theme: ThemeSupa }}
-        onlyThirdPartyProviders
+        onlyThirdPartyProviders={true}
         providers={["kakao"]}
       />
     </div>

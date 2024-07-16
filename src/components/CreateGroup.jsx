@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../supaClient";
+import useAuth from "../hooks/useAuth";
 import {
   Carousel,
   CarouselContent,
@@ -8,8 +9,8 @@ import {
 } from "@/components/ui/ImgCarousel";
 
 const CreateGroup = () => {
+  const { user } = useAuth();
   const [groupName, setGroupName] = useState("");
-  const [userId, setUserId] = useState("");
   const navigate = useNavigate();
 
   const handleCreateGroup = async () => {
@@ -20,7 +21,7 @@ const CreateGroup = () => {
 
     const { data, error } = await supabase
       .from("group")
-      .insert([{ user_id: userId, name: groupName, intro: "intro" }])
+      .insert([{ user_id: user.id, name: groupName, intro: "intro" }])
       .select();
     if (error) {
       console.error("Error creating group:", error);
@@ -29,7 +30,7 @@ const CreateGroup = () => {
       const groupId = data[0].id;
       const { data_member, error } = await supabase
         .from("member")
-        .insert([{ user_id: userId, group_id: groupId, pray_summary: "" }]);
+        .insert([{ user_id: user.id, group_id: groupId }]);
       if (error) {
         console.error("Error create member:", error);
       } else {

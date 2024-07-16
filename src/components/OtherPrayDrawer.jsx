@@ -124,12 +124,7 @@ const OtherPrayDrawer = ({ currentMember, member }) => {
     };
 
     fetchData();
-  }, [
-    member.prayCards,
-    currentMember.profiles.id,
-    member.created_at,
-    generateDates,
-  ]);
+  }, [member.prayCards, currentMember.profiles.id, member.created_at]);
 
   return (
     <div className="w-full flex justify-center">

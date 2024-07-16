@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Auth } from "@supabase/auth-ui-react";
 import { supabase } from "../supaClient";
@@ -13,12 +13,6 @@ const MainPage = () => {
   if (user) {
     navigate("/group", { replace: true });
   }
-  useEffect(() => {
-    if (location.hash) {
-      const cleanURL = `${window.location.origin}${window.location.pathname}`;
-      window.history.replaceState(null, null, cleanURL);
-    }
-  }, [location]);
 
   const from = location.state?.from?.pathname || "/group";
   const redirectUrl = `${import.meta.env.VITE_BASE_URL}${from}`;

@@ -132,7 +132,7 @@ const OtherPrayDrawer = ({ currentMember, member }) => {
   return (
     <div className="w-full flex justify-center">
       <Drawer>
-        <DrawerTrigger className="w-5/6">
+        <DrawerTrigger className="w-full">
           <Profile key={member.id} member={member} />
         </DrawerTrigger>
         <DrawerContent>

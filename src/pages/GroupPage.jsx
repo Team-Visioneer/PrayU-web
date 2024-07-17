@@ -48,8 +48,10 @@ const GroupPage = () => {
     );
   }
   return (
-    <div>
-      <h3 className="text-center mt-10 text-3xl">Group: {targetGroup?.name}</h3>
+    <div className="flex flex-col gap-2 p-6">
+      <div className="flex flex-col gap-2 mt-16 ">
+        <div className="text-lg font-bold">{targetGroup?.name} 그룹</div>
+      </div>
       <Button
         variant="kakao"
         size="sm"

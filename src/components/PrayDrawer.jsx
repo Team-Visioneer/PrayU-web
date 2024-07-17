@@ -11,9 +11,9 @@ import { PrayCarousel } from "./PrayCarousel";
 
 const PrayDrawer = ({ otherMembers, setPrayDone }) => {
   return (
-    <div className="flex justify-center items-center mt-20">
+    <div className="flex justify-center items-center ">
       <Drawer>
-        <div className="flex flex-col items-center justify-center bg-white border border-gray-300 rounded-lg shadow-lg w-80 h-96">
+        <div className="flex flex-col items-center justify-center bg-white border border-gray-300 rounded-lg shadow-lg w-full h-96">
           <h1 className="font-bold text-xl mb-5">오늘의 기도를 시작해보세요</h1>
           <h1>다른 그룹원들의 기도제목을</h1>
           <h1 className="mb-5">확인하고 반응해주세요</h1>

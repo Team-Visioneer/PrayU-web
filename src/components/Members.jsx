@@ -57,8 +57,9 @@ const Members = ({ currentUserId, groupId }) => {
     if (currentMember?.prayCards[0]?.content) {
       return (
         <>
-          <div className="w-5/6">
-            <MyProfile member={currentMember} openModal={openModal} />
+          <MyProfile member={currentMember} openModal={openModal} />
+          <div className="text-lg font-bold">
+            Member({otherMembers.length + 1})
           </div>
           {prayDone ? (
             <OtherProfiles
